@@ -7,14 +7,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.SignUpController">
    <children>
       <Label layoutX="174.0" layoutY="139.0" text="Username" />
       <TextField fx:id="usernameField" layoutX="240.0" layoutY="135.0" />
       <PasswordField fx:id="passwordField" layoutX="241.0" layoutY="175.0" />
       <Label layoutX="174.0" layoutY="179.0" text="Password" />
       <CheckBox fx:id="isAdminCheck" layoutX="246.0" layoutY="220.0" mnemonicParsing="false" text="Admin" />
-      <Button fx:id="createAccountBtn" layoutX="255.0" layoutY="262.0" mnemonicParsing="false" text="Create Account" />
+      <Button fx:id="createAccountBtn" layoutX="255.0" layoutY="262.0" mnemonicParsing="false" onAction="#handleSignUp" text="Create Account" />
    </children>
 </AnchorPane>
