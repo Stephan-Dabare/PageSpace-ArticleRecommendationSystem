@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AddArticleController">
    <children>
       <Label layoutX="264.0" layoutY="28.0" text="Insert Articles" />
       <Label layoutX="74.0" layoutY="59.0" text="Title" />
@@ -17,8 +17,8 @@
       <TextField fx:id="titleField" layoutX="179.0" layoutY="55.0" prefHeight="26.0" prefWidth="380.0" />
       <TextArea fx:id="contentField" layoutX="179.0" layoutY="96.0" prefHeight="86.0" prefWidth="380.0" />
       <TextField fx:id="sourceField" layoutX="179.0" layoutY="243.0" />
-      <Button fx:id="submitBtn" layoutX="273.0" layoutY="330.0" mnemonicParsing="false" text="Submit" />
-      <Button fx:id="backBtn" layoutX="336.0" layoutY="330.0" mnemonicParsing="false" text="Back" />
+      <Button fx:id="submitBtn" layoutX="273.0" layoutY="330.0" mnemonicParsing="false" onAction="#handleSubmit" text="Submit" />
+      <Button fx:id="backBtn" layoutX="336.0" layoutY="330.0" mnemonicParsing="false" onAction="#switchToLogin" text="Back" />
       <TextField fx:id="imagePathField" layoutX="179.0" layoutY="290.0" />
       <Label layoutX="66.0" layoutY="294.0" text="Path to image" />
       <DatePicker fx:id="datePublishedField" layoutX="178.0" layoutY="196.0" />

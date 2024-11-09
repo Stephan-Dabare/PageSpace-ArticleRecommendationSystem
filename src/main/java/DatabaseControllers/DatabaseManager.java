@@ -3,6 +3,12 @@ package DatabaseControllers;
 import OOModels.Admin;
 import OOModels.GeneralUser;
 import OOModels.User;
+import OOModels.Article;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import java.sql.*;
 
@@ -72,5 +78,38 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static void addArticle(Article article) {
+        String sql = "INSERT INTO articles (title, content, category, datePublished, source, image) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, article.getTitle());
+            pstmt.setString(2, article.getContent());
+            pstmt.setString(3, article.getCategory());
+
+            if (article.getDatePublished() != null) {
+                pstmt.setDate(4, new java.sql.Date(article.getDatePublished().getTime()));
+            } else {
+                pstmt.setNull(4, Types.DATE);
+            }
+
+            pstmt.setString(5, article.getSource());
+            pstmt.setBytes(6, bufferedImageToBytes(article.getImage()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static byte[] bufferedImageToBytes(BufferedImage image) {
+        if (image == null) return null;
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, "jpg", baos);
+            return baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
