@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="174.0" layoutY="139.0" text="Username" />
+      <TextField fx:id="usernameField" layoutX="240.0" layoutY="135.0" />
+      <PasswordField fx:id="passwordField" layoutX="241.0" layoutY="175.0" />
+      <Label layoutX="174.0" layoutY="179.0" text="Password" />
+      <CheckBox fx:id="isAdminCheck" layoutX="246.0" layoutY="220.0" mnemonicParsing="false" text="Admin" />
+      <Button fx:id="createAccountBtn" layoutX="255.0" layoutY="262.0" mnemonicParsing="false" text="Create Account" />
+   </children>
+</AnchorPane>
