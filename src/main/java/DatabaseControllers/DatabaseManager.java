@@ -21,24 +21,11 @@ public class DatabaseManager {
 
     public DatabaseManager() {
         createConnection();
-        createTable();
     }
 
     private void createConnection() {
         try {
             connection = DriverManager.getConnection(DB_URL);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createTable() {
-        try (Statement stmt = connection.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS users (" +
-                    "username TEXT PRIMARY KEY, " +
-                    "password TEXT NOT NULL, " +
-                    "isAdmin INTEGER NOT NULL)";
-            stmt.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
