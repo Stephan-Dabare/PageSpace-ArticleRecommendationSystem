@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.Date;
 
 public class Article {
+    // Attributes
     private int id;
     private String title;
     private String content;
@@ -12,6 +13,7 @@ public class Article {
     private String source;
     private BufferedImage image;
 
+    // Constructor
     public Article(int id, String title, String content, String category, Date datePublished, String source, BufferedImage image) {
         this.id = id;
         this.title = title;
@@ -22,6 +24,7 @@ public class Article {
         this.image = image;
     }
 
+    // Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

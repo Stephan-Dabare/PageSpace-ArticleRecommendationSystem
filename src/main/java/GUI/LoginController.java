@@ -44,7 +44,7 @@ public class LoginController {
 
     private void loadMainScene(boolean isAdmin) {
         try {
-            String fxmlFile = isAdmin ? "/GUI/adminHome.fxml" : "/GUI/userHome.fxml";
+            String fxmlFile = isAdmin ? "/GUI/adminHome.fxml" : "/GUI/home.fxml";
             Stage stage = (Stage) usernameField.getScene().getWindow();
             Scene mainScene = new Scene(FXMLLoader.load(getClass().getResource(fxmlFile)));
             stage.setScene(mainScene);

@@ -7,25 +7,37 @@ import OOModels.Article;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:database.db";
+    private Connection connection;
 
     public DatabaseManager() {
+        createConnection();
         createTable();
     }
 
+    private void createConnection() {
+        try {
+            connection = DriverManager.getConnection(DB_URL);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createTable() {
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             Statement stmt = conn.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS users ("
-                    + "username TEXT PRIMARY KEY, "
-                    + "password TEXT NOT NULL, "
-                    + "isAdmin INTEGER NOT NULL)";
+        try (Statement stmt = connection.createStatement()) {
+            String sql = "CREATE TABLE IF NOT EXISTS users (" +
+                    "username TEXT PRIMARY KEY, " +
+                    "password TEXT NOT NULL, " +
+                    "isAdmin INTEGER NOT NULL)";
             stmt.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,11 +114,46 @@ public class DatabaseManager {
         }
     }
 
-    private static byte[] bufferedImageToBytes(BufferedImage image) {
+    public List<Article> getAllArticles() {
+        List<Article> articles = new ArrayList<>();
+        String sql = "SELECT * FROM articles";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Article article = new Article(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getString("category"),
+                        rs.getDate("datePublished"),
+                        rs.getString("source"),
+                        bytesToBufferedImage(rs.getBytes("image"))
+                );
+                articles.add(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return articles;
+    }
+
+    public static byte[] bufferedImageToBytes(BufferedImage image) {
         if (image == null) return null;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "jpg", baos);
             return baos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static BufferedImage bytesToBufferedImage(byte[] bytes) {
+        if (bytes == null) return null;
+        try {
+            return ImageIO.read(new ByteArrayInputStream(bytes));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
