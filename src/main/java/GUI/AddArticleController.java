@@ -1,7 +1,7 @@
 package GUI;
 
 import Algorithmns.ContentCategorizer;
-import DatabaseControllers.DatabaseManager;
+import OOModels.Admin;
 import OOModels.Article;
 
 import javafx.fxml.FXML;
@@ -38,6 +38,13 @@ public class AddArticleController {
     @FXML
     private Button backBtn;
 
+    // Reference to the admin user instance
+    private Admin adminUser;
+
+    public void setAdminUser(Admin adminUser) {
+        this.adminUser = adminUser;
+    }
+
     @FXML
     private void handleSubmit() {
         String title = titleField.getText();
@@ -50,9 +57,14 @@ public class AddArticleController {
         String category = ContentCategorizer.categorizeContent(content);
 
         Article article = new Article(0, title, content, category, datePublished, source, image);
-        DatabaseManager.addArticle(article);
 
-        showAlert("Article Added", "The article has been successfully added.");
+        if (adminUser != null) {
+            // Call adminAddArticle through Admin instance
+            adminUser.adminAddArticle(article);
+            showAlert("Article Added", "The article has been successfully added.");
+        } else {
+            showAlert("Error", "Only admins can add articles.");
+        }
     }
 
     private BufferedImage loadImage(String path) {
