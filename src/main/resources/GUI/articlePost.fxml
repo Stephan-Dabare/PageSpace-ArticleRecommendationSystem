@@ -59,12 +59,7 @@
          <children>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button fx:id="likeButton" mnemonicParsing="false" text="♡">
-                     <font>
-                        <Font name="Segoe UI Semibold" size="13.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="dislikeButton" mnemonicParsing="false" text="👎">
+                  <Button fx:id="likeButton" mnemonicParsing="false" onAction="#initialize" text="♡">
                      <font>
                         <Font name="Segoe UI Semibold" size="13.0" />
                      </font>

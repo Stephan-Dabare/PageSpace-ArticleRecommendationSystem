@@ -5,7 +5,7 @@ public class User {
     private String password;
     private boolean isAdmin;
 
-    // Constructor
+    // Parameterized constructor
     public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;

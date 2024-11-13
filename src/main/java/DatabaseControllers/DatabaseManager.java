@@ -12,8 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:sqlite:database.db";
@@ -144,6 +145,18 @@ public class DatabaseManager {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void updateLikedCategoriesInDB(String username, List<String> likedCategories) {
+        String sql = "UPDATE users SET liked_category = ? WHERE username = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) { // Use existing connection
+            String likedCategoriesString = String.join(",", likedCategories);
+            pstmt.setString(1, likedCategoriesString);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

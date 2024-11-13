@@ -13,6 +13,10 @@ public class Article {
     private String source;
     private BufferedImage image;
 
+    // Default constructor
+    public Article() {
+    }
+
     // Constructor
     public Article(int id, String title, String content, String category, Date datePublished, String source, BufferedImage image) {
         this.id = id;

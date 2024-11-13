@@ -1,12 +1,13 @@
 package GUI;
 
-import DatabaseControllers.DatabaseManager;
 import OOModels.Article;
+import OOModels.GeneralUser;
+import DatabaseControllers.DatabaseManager;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
 
-import java.sql.Connection;
 import java.util.List;
 
 public class HomeController {
@@ -15,6 +16,7 @@ public class HomeController {
     private VBox articlesContainer;
 
     private DatabaseManager databaseManager;
+    private GeneralUser currentUser; // Add this field
 
     public HomeController() {
         this.databaseManager = new DatabaseManager();
@@ -25,8 +27,15 @@ public class HomeController {
         this.databaseManager = databaseManager;
     }
 
+    // Setter for currentUser
+    public void setCurrentUser(GeneralUser user) {
+        this.currentUser = user;
+    }
+
     public void initialize() {
-        loadArticles();
+        if (currentUser != null) {
+            loadArticles();  // Load articles only after currentUser is set
+        }
     }
 
     private void loadArticles() {
@@ -34,12 +43,15 @@ public class HomeController {
             List<Article> articles = databaseManager.getAllArticles();
 
             for (Article article : articles) {
-                // Create a new VBox from the articlePost.fxml
+                // Load the VBox from articlePost.fxml
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/articlePost.fxml"));
                 VBox articleBox = loader.load();
 
                 // Get the controller for this post and set data
                 ArticlePostController controller = loader.getController();
+                controller.setGeneralUser(currentUser); // Pass the currentUser to ArticlePostController
+
+                // Pass the article data to the controller
                 controller.setArticleData(
                         article.getTitle(),
                         article.getCategory(),
