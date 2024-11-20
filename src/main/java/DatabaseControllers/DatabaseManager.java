@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class DatabaseManager {
-    private static final String DB_URL = "jdbc:sqlite:database.db";
+    private static String dbUrl = "jdbc:sqlite:database.db";
     private Connection connection;
 
     public DatabaseManager() {
@@ -26,7 +26,7 @@ public class DatabaseManager {
 
     private void createConnection() {
         try {
-            connection = DriverManager.getConnection(DB_URL);
+            connection = DriverManager.getConnection(dbUrl);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -34,7 +34,7 @@ public class DatabaseManager {
 
     public void addUser(User user) {
         String sql = "INSERT INTO users (username, password, isAdmin) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DriverManager.getConnection(dbUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
@@ -47,7 +47,7 @@ public class DatabaseManager {
 
     public User authenticateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DriverManager.getConnection(dbUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
@@ -67,22 +67,24 @@ public class DatabaseManager {
         return null;
     }
 
-    public boolean userExists(String username) {
-        String sql = "SELECT username FROM users WHERE username = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-            return rs.next();
+    public List<String> getAllUsernames() {
+        List<String> usernames = new ArrayList<>();
+        String sql = "SELECT username FROM users";
+        try (Connection conn = DriverManager.getConnection(dbUrl);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                usernames.add(rs.getString("username"));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return usernames;
     }
 
     public static void addArticle(Article article) {
         String sql = "INSERT INTO articles (title, content, category, datePublished, source, image) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DriverManager.getConnection(dbUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, article.getTitle());
             pstmt.setString(2, article.getContent());
@@ -158,5 +160,23 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<String> getLikedCategories(String username) {
+        String sql = "SELECT liked_category FROM users WHERE username = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String likedCategories = rs.getString("liked_category");
+                if (likedCategories != null && !likedCategories.isEmpty()) {
+                    return Arrays.asList(likedCategories.split(","));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

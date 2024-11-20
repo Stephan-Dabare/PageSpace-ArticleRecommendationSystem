@@ -68,8 +68,13 @@ public class AddArticleController {
     }
 
     private BufferedImage loadImage(String path) {
+        File file = new File(path);
+        if (!file.exists()) {
+            System.err.println("File not found: " + path);
+            return null;
+        }
         try {
-            return ImageIO.read(new File(path));
+            return ImageIO.read(file);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

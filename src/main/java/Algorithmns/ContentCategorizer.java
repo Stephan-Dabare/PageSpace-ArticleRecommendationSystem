@@ -4,50 +4,50 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ContentCategorizer {
-    private static final Map<String, Set<String>> categoryKeywords = new HashMap<>();
+    private static Map<String, Set<String>> categoryKeywords = new HashMap<>();
 
     static {
-        categoryKeywords.put("sports", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Sports", new HashSet<>(Arrays.asList(
                 "team", "game", "player", "score", "tournament", "championship", "coach",
                 "athletic", "sports", "football", "basketball", "soccer", "baseball",
                 "olympics", "match", "racing", "fitness", "league", "victory", "competition"
         )));
-        categoryKeywords.put("entertainment", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Entertainment", new HashSet<>(Arrays.asList(
                 "movie", "film", "music", "concert", "celebrity", "actor", "actress",
                 "director", "show", "television", "series", "performance", "entertainment",
                 "dance", "theater", "festival", "album", "award", "stage", "streaming"
         )));
-        categoryKeywords.put("politics", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Politics", new HashSet<>(Arrays.asList(
                 "government", "election", "president", "congress", "senate", "democrat",
                 "republican", "parliament", "political", "policy", "legislation", "vote",
                 "campaign", "candidate", "minister", "democracy", "law", "party", "bill",
                 "constitution"
         )));
-        categoryKeywords.put("science", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Science", new HashSet<>(Arrays.asList(
                 "research", "scientist", "study", "experiment", "discovery", "laboratory",
                 "physics", "chemistry", "biology", "astronomy", "space", "theory",
                 "scientific", "molecule", "atom", "quantum", "evolution", "hypothesis",
                 "innovation", "data"
         )));
-        categoryKeywords.put("health", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Health", new HashSet<>(Arrays.asList(
                 "medical", "doctor", "hospital", "patient", "treatment", "disease",
                 "health", "medicine", "vaccine", "surgery", "wellness", "therapy",
                 "diagnosis", "clinical", "symptoms", "pharmaceutical", "diet",
                 "nutrition", "mental", "healthcare"
         )));
-        categoryKeywords.put("technology", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Technology", new HashSet<>(Arrays.asList(
                 "software", "hardware", "computer", "internet", "digital", "technology",
                 "app", "programming", "code", "algorithm", "artificial", "intelligence",
                 "device", "mobile", "network", "cyber", "innovation", "startup",
                 "cloud", "data"
         )));
-        categoryKeywords.put("fashion", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Fashion", new HashSet<>(Arrays.asList(
                 "fashion", "style", "clothing", "designer", "trend", "collection",
                 "model", "runway", "brand", "wear", "dress", "accessory", "luxury",
                 "textile", "fabric", "costume", "boutique", "fashion week", "couture",
                 "apparel"
         )));
-        categoryKeywords.put("finance", new HashSet<>(Arrays.asList(
+        categoryKeywords.put("Finance", new HashSet<>(Arrays.asList(
                 "market", "stock", "investment", "bank", "financial", "economy",
                 "trade", "business", "money", "fund", "currency", "profit",
                 "revenue", "asset", "finance", "credit", "debt", "investor",
@@ -75,7 +75,7 @@ public class ContentCategorizer {
                         Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
                 ));
 
-        List<CategoryScore> categoryScores = new ArrayList<>();
+        List<Map.Entry<String, Double>> categoryScores = new ArrayList<>();
 
         for (Map.Entry<String, Set<String>> category : categoryKeywords.entrySet()) {
             double score = 0.0;
@@ -88,26 +88,16 @@ public class ContentCategorizer {
             }
 
             score = score / keywords.size();
-            categoryScores.add(new CategoryScore(category.getKey(), score));
+            categoryScores.add(new AbstractMap.SimpleEntry<>(category.getKey(), score));
         }
 
-        categoryScores.sort((a, b) -> Double.compare(b.score, a.score));
+        categoryScores.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
 
         double threshold = 0.1;
-        if (!categoryScores.isEmpty() && categoryScores.get(0).score > threshold) {
-            return categoryScores.get(0).category;
+        if (!categoryScores.isEmpty() && categoryScores.get(0).getValue() > threshold) {
+            return categoryScores.get(0).getKey();
         }
 
         return "Other";
-    }
-
-    private static class CategoryScore {
-        String category;
-        double score;
-
-        public CategoryScore(String category, double score) {
-            this.category = category;
-            this.score = score;
-        }
     }
 }

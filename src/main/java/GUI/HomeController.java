@@ -4,54 +4,57 @@ import OOModels.Article;
 import OOModels.GeneralUser;
 import DatabaseControllers.DatabaseManager;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeController {
 
     @FXML
+    public Button preferenceBtn;
+
+    @FXML
     private VBox articlesContainer;
 
-    private DatabaseManager databaseManager;
-    private GeneralUser currentUser; // Add this field
+    private final DatabaseManager databaseManager;
+    private GeneralUser currentUser;
 
     public HomeController() {
         this.databaseManager = new DatabaseManager();
     }
 
-    // Constructor with DatabaseManager parameter
-    public HomeController(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
-    }
-
-    // Setter for currentUser
     public void setCurrentUser(GeneralUser user) {
         this.currentUser = user;
     }
 
+    @FXML
     public void initialize() {
         if (currentUser != null) {
-            loadArticles();  // Load articles only after currentUser is set
+            loadArticles();
         }
     }
 
     private void loadArticles() {
         try {
             List<Article> articles = databaseManager.getAllArticles();
+            Collections.shuffle(articles);
 
             for (Article article : articles) {
-                // Load the VBox from articlePost.fxml
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/articlePost.fxml"));
                 VBox articleBox = loader.load();
 
-                // Get the controller for this post and set data
                 ArticlePostController controller = loader.getController();
-                controller.setGeneralUser(currentUser); // Pass the currentUser to ArticlePostController
+                controller.setGeneralUser(currentUser);
 
-                // Pass the article data to the controller
                 controller.setArticleData(
                         article.getTitle(),
                         article.getCategory(),
@@ -61,10 +64,26 @@ public class HomeController {
                         databaseManager.bufferedImageToBytes(article.getImage())
                 );
 
-                // Add the populated VBox to the articles container
                 articlesContainer.getChildren().add(articleBox);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void switchToPreferences(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/userPreference.fxml"));
+            Parent preferenceRoot = loader.load();
+
+            UserPreferenceController controller = loader.getController();
+            controller.setGeneralUser(currentUser); // Pass the current user
+
+            Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
+            Scene preferenceScene = new Scene(preferenceRoot);
+            currentStage.setScene(preferenceScene);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

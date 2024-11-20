@@ -35,7 +35,7 @@ public class SignUpController {
         String password = passwordField.getText();
         boolean isAdmin = isAdminCheck.isSelected();
 
-        if (dbManager.userExists(username)) {
+        if (username.isEmpty() || password.isEmpty() || User.isUsernameTaken(username)) {
             showAlert("Sign Up Failed", "Username already exists. Please choose a different username.");
             return;
         }

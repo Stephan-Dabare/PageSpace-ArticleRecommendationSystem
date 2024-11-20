@@ -123,7 +123,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Top Picks for You">
+                        <Button fx:id="preferenceBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#switchToPreferences" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Top Picks for You">
                            <font>
                               <Font name="Segoe UI Historic" size="16.0" />
                            </font>
