@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.UserPreferenceController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.UserPreferenceController">
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="900.0" style="-fx-background-color: #2f4858;" stylesheets="@../styles/styles.css" BorderPane.alignment="CENTER">
             <children>
@@ -106,7 +106,7 @@
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Explore">
+                                <Button fx:id="backToHomeBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#backToHome" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Explore">
                                     <font>
                                         <Font name="Segoe UI Historic" size="16.0" />
                                     </font>

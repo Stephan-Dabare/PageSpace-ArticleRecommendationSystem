@@ -10,11 +10,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DatabaseManager {
     private static String dbUrl = "jdbc:sqlite:database.db";

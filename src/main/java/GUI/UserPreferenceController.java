@@ -5,11 +5,18 @@ import OOModels.Article;
 import OOModels.GeneralUser;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class UserPreferenceController {
+    @FXML
+    public Button backToHomeBtn;
     @FXML
     private VBox articlesContainer;
 
@@ -67,6 +74,23 @@ public class UserPreferenceController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    private void backToHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/home.fxml"));
+            Parent homeRoot = loader.load();
+
+            HomeController homeController = loader.getController();
+            homeController.setCurrentUser(currentUser);  // Pass current user to HomeController
+            homeController.initialize();
+
+            Stage stage = (Stage) articlesContainer.getScene().getWindow();
+            stage.setScene(new Scene(homeRoot));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
