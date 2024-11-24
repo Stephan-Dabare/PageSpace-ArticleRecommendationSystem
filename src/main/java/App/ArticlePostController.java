@@ -1,17 +1,17 @@
-// ArticlePostController.java
-package GUI;
+package App;
 
-import OOModels.GeneralUser;
+import Models.GeneralUser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+
 import java.io.ByteArrayInputStream;
 
 public class ArticlePostController {
-
+    @FXML
+    public Label authorLabel;
     @FXML
     private ImageView imageView;
 
@@ -25,23 +25,17 @@ public class ArticlePostController {
     private Label dateLabel;
 
     @FXML
-    private Label sourceLabel;
-
-    @FXML
     private Label contentLabel;
-
-    @FXML
-    private HBox likeDislikeBox;
 
     @FXML
     private Button likeButton;
 
 
-    public void setArticleData(String title, String category, String date, String source, String content, byte[] imageBytes) {
+    public void setArticleData(String title, String category,String author, String date, String content, byte[] imageBytes) {
         titleLabel.setText(title);
         categoryLabel.setText(category);
+        authorLabel.setText(author);
         dateLabel.setText(date);
-        sourceLabel.setText(source);
         contentLabel.setText(content);
 
         if (imageBytes != null) {
@@ -49,7 +43,6 @@ public class ArticlePostController {
             imageView.setImage(image);
         }
     }
-
 
     private GeneralUser currentUser;  // Pass the current user into this controller
 

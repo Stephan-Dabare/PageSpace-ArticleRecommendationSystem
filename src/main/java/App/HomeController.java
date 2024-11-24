@@ -1,9 +1,8 @@
-package GUI;
+package App;
 
-import OOModels.Article;
-import OOModels.GeneralUser;
-import DatabaseControllers.DatabaseManager;
-
+import Models.Article;
+import Models.GeneralUser;
+import DB.DatabaseHandler;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,11 +24,12 @@ public class HomeController {
     @FXML
     private VBox articlesContainer;
 
-    private final DatabaseManager databaseManager;
+    private final DatabaseHandler databaseHandler;
+
     private GeneralUser currentUser;
 
     public HomeController() {
-        this.databaseManager = new DatabaseManager();
+        this.databaseHandler = new DatabaseHandler();
     }
 
     public void setCurrentUser(GeneralUser user) {
@@ -45,11 +45,11 @@ public class HomeController {
 
     private void loadArticles() {
         try {
-            List<Article> articles = databaseManager.getAllArticles();
+            List<Article> articles = databaseHandler.getAllArticles();
             Collections.shuffle(articles);
 
             for (Article article : articles) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/articlePost.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articlePost.fxml"));
                 VBox articleBox = loader.load();
 
                 ArticlePostController controller = loader.getController();
@@ -57,11 +57,11 @@ public class HomeController {
 
                 controller.setArticleData(
                         article.getTitle(),
-                        article.getCategory(),
+                        article.getCategory().toString(),
+                        article.getCreatedBy().getUsername(),
                         article.getDatePublished().toString(),
-                        article.getSource(),
                         article.getContent(),
-                        databaseManager.bufferedImageToBytes(article.getImage())
+                        databaseHandler.bufferedImageToBytes(article.getImage())
                 );
 
                 articlesContainer.getChildren().add(articleBox);
@@ -74,7 +74,7 @@ public class HomeController {
     @FXML
     private void switchToPreferences(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/userPreference.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/userPreference.fxml"));
             Parent preferenceRoot = loader.load();
 
             UserPreferenceController controller = loader.getController();
@@ -88,3 +88,4 @@ public class HomeController {
         }
     }
 }
+

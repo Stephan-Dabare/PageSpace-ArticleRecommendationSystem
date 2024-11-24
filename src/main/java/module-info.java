@@ -5,6 +5,6 @@ module org.example.ood_cw {
     requires java.desktop;
 
 
-    opens GUI to javafx.fxml;
-    exports GUI;
+    opens App to javafx.fxml;
+    exports App;
 }

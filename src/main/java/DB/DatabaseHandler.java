@@ -1,9 +1,10 @@
-package DatabaseControllers;
+package DB;
 
-import OOModels.Admin;
-import OOModels.GeneralUser;
-import OOModels.User;
-import OOModels.Article;
+import Models.Article;
+import Models.Category;
+import Models.User;
+import Models.GeneralUser;
+import Models.AdminUser;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -13,26 +14,35 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-public class DatabaseManager {
-    private static String dbUrl = "jdbc:sqlite:database.db";
+public class DatabaseHandler {
+    private static final String DATABASE_URL = "jdbc:sqlite:database.db";
     private Connection connection;
+    private static DatabaseHandler instance;
 
-    public DatabaseManager() {
+    public DatabaseHandler() {
         createConnection();
+    }
+
+    public static DatabaseHandler getInstance() {
+        if (instance == null) {
+            instance = new DatabaseHandler();
+        }
+        return instance;
     }
 
     private void createConnection() {
         try {
-            connection = DriverManager.getConnection(dbUrl);
+            connection = DriverManager.getConnection(DATABASE_URL);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void addUser(User user) {
-        String sql = "INSERT INTO users (username, password, isAdmin) VALUES (?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(dbUrl);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    // Insert a new user
+    public static void insertUser(User user) {
+        String query = "INSERT INTO Users (username, password, is_admin) VALUES (?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setInt(3, user.isAdmin() ? 1 : 0);
@@ -44,16 +54,16 @@ public class DatabaseManager {
 
     public User authenticateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-        try (Connection conn = DriverManager.getConnection(dbUrl);
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                boolean isAdmin = rs.getInt("isAdmin") == 1;
+                boolean isAdmin = rs.getInt("is_Admin") == 1;
                 if (isAdmin) {
-                    return new Admin(username, password);
+                    return new AdminUser(username, password);
                 } else {
                     return new GeneralUser(username, password);
                 }
@@ -64,36 +74,20 @@ public class DatabaseManager {
         return null;
     }
 
-    public List<String> getAllUsernames() {
-        List<String> usernames = new ArrayList<>();
-        String sql = "SELECT username FROM users";
-        try (Connection conn = DriverManager.getConnection(dbUrl);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                usernames.add(rs.getString("username"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return usernames;
-    }
-
-    public static void addArticle(Article article) {
-        String sql = "INSERT INTO articles (title, content, category, datePublished, source, image) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(dbUrl);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    // Insert a new article
+    public static void insertArticle(Article article) {
+        String query = "INSERT INTO Articles (title, content, category, created_by, date_published, image) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, article.getTitle());
             pstmt.setString(2, article.getContent());
-            pstmt.setString(3, article.getCategory());
-
+            pstmt.setString(3, article.getCategory().getName());
+            pstmt.setString(4, article.getCreatedBy().getUsername());
             if (article.getDatePublished() != null) {
-                pstmt.setDate(4, new java.sql.Date(article.getDatePublished().getTime()));
+                pstmt.setDate(5, new java.sql.Date(article.getDatePublished().getTime()));
             } else {
-                pstmt.setNull(4, Types.DATE);
+                pstmt.setNull(5, Types.DATE);
             }
-
-            pstmt.setString(5, article.getSource());
             pstmt.setBytes(6, bufferedImageToBytes(article.getImage()));
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -110,12 +104,11 @@ public class DatabaseManager {
 
             while (rs.next()) {
                 Article article = new Article(
-                        rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("category"),
-                        rs.getDate("datePublished"),
-                        rs.getString("source"),
+                        new Category(rs.getString("category")),
+                        new AdminUser(rs.getString("created_by"), "adminPassword"),
+                        new java.sql.Date(rs.getDate("date_Published").getTime()),
                         bytesToBufferedImage(rs.getBytes("image"))
                 );
                 articles.add(article);
@@ -147,9 +140,25 @@ public class DatabaseManager {
         }
     }
 
-    public void updateLikedCategoriesInDB(String username, List<String> likedCategories) {
+    public List<String> getAllUsernames() {
+        List<String> usernames = new ArrayList<>();
+        String sql = "SELECT username FROM users";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                usernames.add(rs.getString("username"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return usernames;
+    }
+
+    public static void updateLikedCategories(String username, List<String> likedCategories) {
         String sql = "UPDATE users SET liked_category = ? WHERE username = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) { // Use existing connection
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             String likedCategoriesString = String.join(",", likedCategories);
             pstmt.setString(1, likedCategoriesString);
             pstmt.setString(2, username);
@@ -159,9 +168,10 @@ public class DatabaseManager {
         }
     }
 
-    public List<String> getLikedCategories(String username) {
+    public static List<String> getLikedCategories(String username) {
         String sql = "SELECT liked_category FROM users WHERE username = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
 

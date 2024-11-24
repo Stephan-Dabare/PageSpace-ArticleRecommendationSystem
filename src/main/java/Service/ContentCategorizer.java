@@ -1,4 +1,4 @@
-package Algorithmns;
+package Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -112,8 +112,7 @@ public class ContentCategorizer {
         String[] words = content.split("\\W+");
 
         Set<String> stopWords = new HashSet<>(Arrays.asList(
-                "the", "a", "an", "and", "or", "but", "in", "on", "at", "to",
-                "for", "of", "with", "by"
+                "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by"
         ));
 
         Map<String, Integer> wordFrequency = Arrays.stream(words)
@@ -123,29 +122,30 @@ public class ContentCategorizer {
                         Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
                 ));
 
-        List<Map.Entry<String, Double>> categoryScores = new ArrayList<>();
+        Map<String, Double> categoryScores = new HashMap<>();
 
         for (Map.Entry<String, Set<String>> category : categoryKeywords.entrySet()) {
-            double score = 0.0;
+            String categoryName = category.getKey();
             Set<String> keywords = category.getValue();
+            int matchCount = 0;
 
-            for (Map.Entry<String, Integer> word : wordFrequency.entrySet()) {
-                if (keywords.contains(word.getKey())) {
-                    score += word.getValue() * 1.0;
+            for (String word : wordFrequency.keySet()) {
+                if (keywords.contains(word)) {
+                    matchCount += wordFrequency.get(word);
                 }
             }
 
-            score = score / keywords.size();
-            categoryScores.add(new AbstractMap.SimpleEntry<>(category.getKey(), score));
+            if (matchCount > 0) {
+                categoryScores.put(categoryName, (double) matchCount / keywords.size());
+            }
         }
 
-        categoryScores.sort((a, b) -> Double.compare(b.getValue(), a.getValue()));
-
-        double threshold = 0.1;
-        if (!categoryScores.isEmpty() && categoryScores.get(0).getValue() > threshold) {
-            return categoryScores.get(0).getKey();
-        }
-
-        return "Other";
+        return categoryScores.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .filter(entry -> entry.getValue() > 0.05)
+                .map(Map.Entry::getKey)
+                .orElse("Other");
     }
+
 }
+

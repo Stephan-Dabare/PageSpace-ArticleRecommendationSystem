@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="565.0" spacing="10.0" styleClass="news-background" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ArticlePostController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="565.0" spacing="10.0" styleClass="news-background" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.ArticlePostController">
    <children>
       <Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" text="Title">
          <font>
@@ -25,7 +25,7 @@
                   <Font name="Segoe UI Historic" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="sourceLabel" text="Source" textFill="#616770">
+            <Label fx:id="authorLabel" text="Author" textFill="#616770">
                <font>
                   <Font name="Segoe UI Historic" size="15.0" />
                </font>

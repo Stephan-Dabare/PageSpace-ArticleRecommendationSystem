@@ -1,8 +1,8 @@
-package GUI;
+package App;
 
-import DatabaseControllers.DatabaseManager;
-import OOModels.Article;
-import OOModels.GeneralUser;
+import Models.Article;
+import Models.GeneralUser;
+import DB.DatabaseHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class UserPreferenceController {
@@ -21,10 +22,10 @@ public class UserPreferenceController {
     private VBox articlesContainer;
 
     private GeneralUser currentUser;
-    private final DatabaseManager databaseManager;
+    private DatabaseHandler databaseHandler;
 
     public UserPreferenceController() {
-        this.databaseManager = new DatabaseManager();
+        this.databaseHandler = new DatabaseHandler();
     }
 
     @FXML
@@ -53,34 +54,36 @@ public class UserPreferenceController {
     }
 
     private void populateArticles(List<Article> articles) {
-        articlesContainer.getChildren().clear();
-        for (Article article : articles) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/articlePost.fxml"));
+        try {
+            Collections.shuffle(articles);
+
+            for (Article article : articles) {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articlePost.fxml"));
                 VBox articleBox = loader.load();
 
                 ArticlePostController controller = loader.getController();
                 controller.setGeneralUser(currentUser);
+
                 controller.setArticleData(
                         article.getTitle(),
-                        article.getCategory(),
+                        article.getCategory().toString(),
+                        article.getCreatedBy().getUsername(),
                         article.getDatePublished().toString(),
-                        article.getSource(),
                         article.getContent(),
-                        databaseManager.bufferedImageToBytes(article.getImage())
+                        databaseHandler.bufferedImageToBytes(article.getImage())
                 );
 
                 articlesContainer.getChildren().add(articleBox);
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
     private void backToHome() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/GUI/home.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/home.fxml"));
             Parent homeRoot = loader.load();
 
             HomeController homeController = loader.getController();

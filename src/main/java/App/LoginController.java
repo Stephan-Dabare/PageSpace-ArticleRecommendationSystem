@@ -1,18 +1,18 @@
-package GUI;
+package App;
 
-import OOModels.Admin;
-import OOModels.GeneralUser;
-import OOModels.User;
-import DatabaseControllers.DatabaseManager;
+import Models.AdminUser;
+import Models.GeneralUser;
+import Models.User;
+import DB.DatabaseHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.Alert;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class LoginController {
     @FXML
     public Button signUpBtn;
 
-    private DatabaseManager dbManager = new DatabaseManager();
+    private DatabaseHandler dbManager = new DatabaseHandler();
 
     @FXML
     private void handleLogin() {
@@ -47,17 +47,16 @@ public class LoginController {
 
     private void loadMainScene(User user) {
         try {
-            String fxmlFile = user.isAdmin() ? "/GUI/adminHome.fxml" : "/GUI/home.fxml";
+            String fxmlFile = user.isAdmin() ? "/App/adminHome.fxml" : "/App/home.fxml";
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
             // If the user is an admin, set the Admin instance in the controller
             if (user.isAdmin()) {
                 AddArticleController addArticleController = loader.getController();
-                Admin adminUser = (Admin) user; // Cast to Admin for admin-specific logic
+                AdminUser adminUser = (AdminUser) user; // Cast to Admin for admin-specific logic
                 addArticleController.setAdminUser(adminUser);
             } else {
-                // For GeneralUser, set the current user in the HomeController
                 HomeController homeController = loader.getController();
                 GeneralUser generalUser = (GeneralUser) user; // Cast to GeneralUser
                 homeController.setCurrentUser(generalUser);  // Pass current user to HomeController
@@ -83,7 +82,7 @@ public class LoginController {
     private void switchToSignUp() {
         try {
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            Scene signUpScene = new Scene(FXMLLoader.load(getClass().getResource("/GUI/signUp.fxml")));
+            Scene signUpScene = new Scene(FXMLLoader.load(getClass().getResource("/App/signUpView.fxml")));
             stage.setScene(signUpScene);
         } catch (IOException e) {
             e.printStackTrace();
