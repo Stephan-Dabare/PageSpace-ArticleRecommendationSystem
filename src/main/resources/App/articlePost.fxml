@@ -10,7 +10,7 @@
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="565.0" spacing="10.0" styleClass="news-background" stylesheets="@../styles/styles.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.ArticlePostController">
    <children>
-      <Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" text="Title">
+      <Label fx:id="titleLabel" maxWidth="1.7976931348623157E308" text="Title" textFill="WHITE">
          <font>
             <Font name="Segoe UI Semibold" size="18.0" />
          </font>
@@ -20,12 +20,12 @@
       </Label>
       <HBox>
          <children>
-            <Label fx:id="categoryLabel" text="Category" textFill="#616770">
+            <Label fx:id="categoryLabel" text="Category" textFill="#a3e636">
                <font>
                   <Font name="Segoe UI Historic" size="15.0" />
                </font>
             </Label>
-            <Label fx:id="authorLabel" text="Author" textFill="#616770">
+            <Label fx:id="authorLabel" text="Author" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Historic" size="15.0" />
                </font>
@@ -33,7 +33,7 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <Label fx:id="dateLabel" text="Date" textFill="#616770">
+            <Label fx:id="dateLabel" text="Date" textFill="WHITE">
                <font>
                   <Font name="Segoe UI Historic" size="15.0" />
                </font>
@@ -47,7 +47,7 @@
          </VBox.margin>
       </HBox>
       <ImageView fx:id="imageView" fitHeight="301.0" fitWidth="535.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="contentLabel" maxWidth="1.7976931348623157E308" text="Content">
+      <Label fx:id="contentLabel" maxWidth="1.7976931348623157E308" text="Content" textFill="WHITE">
          <VBox.margin>
             <Insets left="20.0" right="20.0" />
          </VBox.margin>
@@ -59,7 +59,7 @@
          <children>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <Button fx:id="likeButton" mnemonicParsing="false" onAction="#initialize" text="♡">
+                  <Button fx:id="likeButton" mnemonicParsing="false" onAction="#initialize" styleClass="button4" stylesheets="@../styles/styles.css" text="♡">
                      <font>
                         <Font name="Segoe UI Semibold" size="13.0" />
                      </font>

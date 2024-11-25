@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.UserPreferenceController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.UserPreferenceController">
     <top>
-        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="900.0" style="-fx-background-color: #2f4858;" stylesheets="@../styles/styles.css" BorderPane.alignment="CENTER">
+        <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="900.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
             <children>
                 <ImageView fitHeight="45.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -24,16 +24,22 @@
                 </ImageView>
                 <HBox prefHeight="50.0" prefWidth="250.0" />
                 <Pane prefHeight="200.0" prefWidth="200.0" />
-                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="198.0">
+                <HBox alignment="CENTER" prefHeight="50.0" prefWidth="198.0">
                     <children>
-                        <Button mnemonicParsing="false" prefHeight="50.0" style="-fx-background-color: transparent;" text="Login" textFill="WHITE">
+                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: transparent;" styleClass="button2" stylesheets="@../styles/styles.css" text="Login" textFill="#a3e636">
                             <HBox.margin>
-                                <Insets right="20.0" />
-                            </HBox.margin></Button>
-                        <Button mnemonicParsing="false" prefHeight="50.0" style="-fx-background-color: transparent;" text="SignUp" textFill="WHITE">
+                                <Insets right="10.0" />
+                            </HBox.margin>
+                            <font>
+                                <Font size="13.0" />
+                            </font></Button>
+                        <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="70.0" style="-fx-background-color: transparent;" styleClass="button2" stylesheets="@../styles/styles.css" text="SignUp" textFill="#a3e636">
                             <HBox.margin>
                                 <Insets left="5.0" right="20.0" />
                             </HBox.margin>
+                            <font>
+                                <Font size="13.0" />
+                            </font>
                         </Button>
                     </children>
                 </HBox>
@@ -46,9 +52,9 @@
     <center>
         <HBox prefHeight="650.0" prefWidth="650.0" BorderPane.alignment="CENTER">
             <children>
-                <ScrollPane fx:id="scrollPane" maxWidth="650.0" minWidth="650.0" prefHeight="650.0" prefWidth="650.0" style="-fx-background-color: transparent;">
+                <ScrollPane fx:id="scrollPane" maxWidth="650.0" minWidth="650.0" prefHeight="650.0" prefWidth="650.0" style="-fx-background-color: transparent;" styleClass="hidden-scroll-pane" stylesheets="@../styles/styles.css">
                     <content>
-                        <VBox fx:id="articlesContainer" alignment="TOP_CENTER" onDragDetected="#initialize" prefHeight="650.0" prefWidth="650.0" spacing="20.0" styleClass="body-background" stylesheets="@../styles/styles.css">
+                        <VBox fx:id="articlesContainer" alignment="TOP_CENTER" onDragDetected="#initialize" prefHeight="650.0" prefWidth="650.0" spacing="20.0" style="-fx-background-color: #1e1e1e;">
                             <padding>
                                 <Insets top="20.0" />
                             </padding>
@@ -59,7 +65,7 @@
         </HBox>
     </center>
     <left>
-        <AnchorPane prefHeight="650.0" prefWidth="250.0" style="-fx-background-color: #d1ffdd;" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="650.0" prefWidth="250.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
             <children>
                 <VBox layoutY="52.79999923706055" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0">
                     <children>
@@ -67,15 +73,15 @@
                             <children>
                                 <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/gamer.png" />
+                                        <Image url="@../img/cropped_image.png" />
                                     </image>
                                     <HBox.margin>
-                                        <Insets left="20.0" />
+                                        <Insets left="10.0" />
                                     </HBox.margin>
                                 </ImageView>
                                 <VBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="250.0">
                                     <children>
-                                        <Label alignment="CENTER" text="Username">
+                                        <Label alignment="CENTER" text="Username" textFill="WHITE">
                                             <font>
                                                 <Font name="Segoe UI Light" size="17.0" />
                                             </font>
@@ -83,7 +89,7 @@
                                                 <Insets left="10.0" />
                                             </padding>
                                         </Label>
-                                        <Label text="Account">
+                                        <Label text="Account" textFill="WHITE">
                                             <padding>
                                                 <Insets left="10.0" />
                                             </padding>
@@ -96,37 +102,40 @@
                             </children>
                         </HBox>
                         <HBox prefHeight="38.0" prefWidth="200.0" />
-                        <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="200.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="200.0" styleClass="button2" stylesheets="@../styles/styles.css">
                             <children>
                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/explore.png" />
+                                        <Image url="@../img/exploreWhite.png" />
                                     </image>
                                     <HBox.margin>
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button fx:id="backToHomeBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#backToHome" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Explore">
+                                <Button fx:id="homeBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#backToHome" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Explore" textFill="WHITE">
                                     <font>
                                         <Font name="Segoe UI Historic" size="16.0" />
                                     </font>
                                 </Button>
                             </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #a2d9c7;">
+                        <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: #a3e636; -fx-background-radius: 8;">
                             <children>
                                 <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../img/heart3.png" />
+                                        <Image url="@../img/heart.png" />
                                     </image>
                                     <HBox.margin>
                                         <Insets left="20.0" />
                                     </HBox.margin>
                                 </ImageView>
-                                <Button alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Top Picks for You">
+                                <Button fx:id="preferenceBtn" alignment="TOP_LEFT" mnemonicParsing="false" prefHeight="38.0" prefWidth="200.0" style="-fx-background-color: transparent;" text="Top Picks for You">
                                     <font>
                                         <Font name="Segoe UI Historic" size="16.0" />
                                     </font>
+                                    <HBox.margin>
+                                        <Insets />
+                                    </HBox.margin>
                                 </Button>
                             </children>
                             <VBox.margin>
@@ -134,21 +143,19 @@
                             </VBox.margin>
                         </HBox>
                         <Pane prefHeight="330.0" prefWidth="250.0" />
-                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="250.0" style="-fx-background-color: #2f4858;">
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="250.0" style="-fx-background-color: #1e1e1e; -fx-background-radius: 8;" styleClass="button3" stylesheets="@../styles/styles.css">
                             <children>
-                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="LogIn" textFill="#fffdfd">
+                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Exit" textFill="#cf0000">
                                     <font>
-                                        <Font name="Segoe UI" size="13.0" />
-                                    </font>
-                                </Button>
-                                <Button alignment="CENTER" mnemonicParsing="false" prefHeight="38.0" prefWidth="100.0" style="-fx-background-color: transparent;" text="Sign Up" textFill="WHITE">
-                                    <font>
-                                        <Font name="Segoe UI" size="13.0" />
+                                        <Font name="Segoe UI" size="14.0" />
                                     </font>
                                 </Button>
                             </children>
                         </HBox>
                     </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
                 </VBox>
             </children>
         </AnchorPane>

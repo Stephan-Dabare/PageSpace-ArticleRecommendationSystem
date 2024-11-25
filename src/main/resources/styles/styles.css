@@ -1,5 +1,5 @@
 .news-background{
-    -fx-background-color: #fff;
+    -fx-background-color: #2f2f2f;
     -fx-background-radius: 15;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5.0, 0, 0, 5.0);
 }
@@ -8,90 +8,105 @@
     -fx-wrap-text: true;
 }
 
-.like-container{
-    -fx-background-color: #fff;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5.0, 0, 0, 5.0);
-    -fx-background-width: 1;
-    -fx-border-color: #B8B9BB;
-    -fx-border-radius: 50;
-}
-
 .top-border{
     -fx-border-width: 1 0 0 0;
-    -fx-border-color: #606266;
+    -fx-border-color: #a3e636;
 }
 
-.round-button{
-    -fx-background-radius: 50;
-    -fx-background-color: #f0f2f5;
-}
-
-.white-background{
-    -fx-background-color: #fff;
-}
-
-.black-background{
-    -fx-background-color: #000;
-}
-
-.body-background{
-    -fx-background-color: #f0f2f5;
-}
-
-.scroll-pane > .viewport{
-    -fx-background-color: transparent;
-}
-
-
-.white-background {
-    -fx-background-color: white;
-    -fx-padding: 10;
-}
-
-.body-background {
-    -fx-background-color: #f5f5f5;
-}
-
-.header-label {
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333;
-}
-
-.news-item {
-    -fx-background-color: #ffffff;
-    -fx-padding: 15;
-    -fx-spacing: 10;
-    -fx-border-color: #ddd;
+.border{
     -fx-border-width: 1;
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+    -fx-border-color: #a3e636;
+    -fx-border-radius: 15;
 }
 
-.news-image {
-    -fx-fit-width: 100;
-    -fx-fit-height: 100;
+
+
+
+.button1 {
+    -fx-background-color: #a3e636; /* Bright neon green color */
+    -fx-background-radius: 8px; /* Slightly rounded corners */
+    -fx-padding: 6px 14px;
+    -fx-cursor: hand;
 }
 
-.news-title {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
-    -fx-text-fill: #333;
+/* Hover state */
+.button1:hover {
+    -fx-background-color: white !important;
 }
 
-.news-date {
-    -fx-font-size: 12px;
-    -fx-text-fill: #777;
+/* Pressed state */
+.button1:pressed {
+    -fx-background-color: #99E600;
 }
 
-.news-content {
-    -fx-font-size: 14px;
-    -fx-text-fill: #555;
+
+
+
+.button2 {
+    -fx-background-color: black;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8;
+    -fx-border-width: 0.5;
 }
+
+/* Hover state */
+.button2:hover {
+    -fx-border-color: #a3e636 !important;
+}
+
+.button3 {
+    -fx-background-color:  #1e1e1e;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8;
+    -fx-border-width: 0.5;
+}
+
+/* Hover state */
+.button3:hover {
+    -fx-border-color: #cf0000 !important;
+}
+
+
+
+.button4 {
+    -fx-background-color: #a3e636;
+    -fx-background-radius: 15px;
+    -fx-cursor: hand;
+}
+
+.button4:hover {
+    -fx-background-color: white !important;
+}
+
+.button4:pressed {
+    -fx-background-color: red;
+}
+
+
+
+
+.text-field1 {
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #808080;
+    -fx-background-radius: 8;
+    -fx-padding: 8;
+    -fx-border-color: transparent;
+    -fx-border-radius: 8;
+    -fx-border-width: 0.5;
+}
+
+.text-field1:focused {
+    -fx-border-color: #a3e636;
+}
+
+
 
 .hidden-scroll-pane {
     -fx-vbar-policy: never;
+    -fx-hbar-policy: never;
 }
 
 

@@ -1,18 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.LoginController">
    <children>
-      <Label layoutX="190.0" layoutY="140.0" text="Usename" />
-      <Label layoutX="190.0" layoutY="175.0" text="Password" />
-      <TextField fx:id="usernameField" layoutX="251.0" layoutY="136.0" />
-      <PasswordField fx:id="passwordField" layoutX="252.0" layoutY="171.0" />
-      <Button fx:id="loginBtn" layoutX="240.0" layoutY="248.0" mnemonicParsing="false" onAction="#handleLogin" text="Login" />
-      <Button fx:id="signUpBtn" layoutX="299.0" layoutY="248.0" mnemonicParsing="false" onAction="#switchToSignUp" text="SignUp" />
+      <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;">
+         <center>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/Logo_white.png" />
+                     </image>
+                  </ImageView>
+                  <Pane prefHeight="77.0" prefWidth="350.0" />
+                  <HBox alignment="CENTER" prefHeight="47.0" prefWidth="350.0">
+                     <children>
+                        <Label text="Usename" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="usernameField" style="-fx-background-color: #1e1e1e;" styleClass="text-field1" stylesheets="@../styles/styles.css">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="53.0" prefWidth="350.0">
+                     <children>
+                        <Label text="Password" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="passwordField" style="-fx-background-color: #1e1e1e;" styleClass="text-field1" stylesheets="@../styles/styles.css">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </PasswordField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="123.0" prefWidth="374.0">
+                     <children>
+                        <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#handleLogin" prefHeight="28.0" prefWidth="102.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="Login">
+                           <font>
+                              <Font name="Segoe UI" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="signUpBtn" mnemonicParsing="false" onAction="#switchToSignUp" prefHeight="28.0" prefWidth="102.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="SignUp">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Segoe UI" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </center>
+         <left>
+            <ImageView fitHeight="700.0" fitWidth="553.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../img/11.jpg" />
+               </image>
+            </ImageView>
+         </left>
+      </BorderPane>
    </children>
 </AnchorPane>
