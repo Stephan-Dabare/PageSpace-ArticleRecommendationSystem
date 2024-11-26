@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="App.SignUpController">
-   <TextField fx:id="usernameField" promptText="Username"/>
-   <PasswordField fx:id="passwordField" promptText="Password"/>
-   <CheckBox fx:id="isAdminCheckBox" text="Admin"/>
-   <Button fx:id="signUpBtn" text="Sign Up" onAction="#signUp"/>
-</VBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.SignUpController">
+   <children>
+      <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;">
+         <center>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/Logo_white.png" />
+                     </image>
+                  </ImageView>
+                  <Pane prefHeight="77.0" prefWidth="350.0" />
+                  <HBox alignment="CENTER" prefHeight="47.0" prefWidth="350.0">
+                     <children>
+                        <Label text="Usename" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="usernameField" style="-fx-background-color: #1e1e1e;" styleClass="text-field1" stylesheets="@../styles/styles.css">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </TextField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="53.0" prefWidth="350.0">
+                     <children>
+                        <Label text="Password" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI" size="16.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="passwordField" style="-fx-background-color: #1e1e1e;" styleClass="text-field1" stylesheets="@../styles/styles.css">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </PasswordField>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="374.0">
+                     <children>
+                        <CheckBox fx:id="isAdminCheckBox" mnemonicParsing="false" stylesheets="@../styles/styles.css" text="Admin" textFill="WHITE">
+                           <font>
+                              <Font name="Segoe UI Semibold" size="13.0" />
+                           </font>
+                        </CheckBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="65.0" prefWidth="374.0">
+                     <children>
+                        <Button fx:id="signUpBtn" mnemonicParsing="false" onAction="#signUp" prefHeight="32.0" prefWidth="243.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="Create Account">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font name="Segoe UI" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </center>
+         <left>
+            <ImageView fitHeight="700.0" fitWidth="553.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../img/12.jpg" />
+               </image>
+            </ImageView>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>

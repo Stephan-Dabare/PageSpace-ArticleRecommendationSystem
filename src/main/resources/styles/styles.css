@@ -88,7 +88,7 @@
 
 
 .text-field1 {
-    -fx-background-color: #333333;
+    -fx-background-color:  #1e1e1e;
     -fx-text-fill: white;
     -fx-prompt-text-fill: #808080;
     -fx-background-radius: 8;
@@ -104,10 +104,113 @@
 
 
 
+
+
+.text-area1 {
+    -fx-background-color:  #1e1e1e;
+    -fx-control-inner-background:  #1e1e1e; /* Inner background color */
+    -fx-text-fill: white;                 /* Text color */
+    -fx-prompt-text-fill: #1e1e1e;        /* Prompt (placeholder) text color */
+    -fx-background-radius: 8;            /* Outer rounded corners */
+    -fx-padding: 1.5;                      /* Padding for the TextArea */
+    -fx-border-color: transparent;       /* Border color */
+    -fx-border-radius: 8;                /* Border radius */
+    -fx-border-width: 0.5;               /* Border width */
+}
+
+
+.text-area1:focused {
+    -fx-border-color: #a3e636;           /* Border color when focused */
+    -fx-control-inner-background: #1e1e1e; /* Inner background on focus */
+}
+
+
+
 .hidden-scroll-pane {
     -fx-vbar-policy: never;
     -fx-hbar-policy: never;
 }
+
+
+
+
+/* General CheckBox Style */
+.check-box {
+    -fx-text-fill: white; /* Set text color to white */
+    -fx-padding: 5;       /* Add some padding */
+}
+
+.check-box .box {
+    -fx-shape: "M 0 0 A 7 7 0 1 1 0 -0.1 Z"; /* Define a circle shape */
+    -fx-border-color: #a3e636; /* Set border color */
+    -fx-border-width: 1;     /* Set border width */
+    -fx-background-color: transparent; /* Make the background transparent */
+}
+
+.check-box:hover .box {
+    -fx-border-color: lightgray; /* Change border color when hovered */
+}
+
+.check-box:selected .box {
+    -fx-background-color: #a3e636;
+    -fx-border-color: #a3e636;
+}
+
+
+
+
+
+
+
+
+.date-picker {
+    -fx-background-color: #1e1e1e; /* Outer background color */
+    -fx-text-fill: white;          /* Text color */
+    -fx-padding: 3;               /* Padding for the control */
+    -fx-border-radius: 8;         /* Rounded corners for the border */
+    -fx-border-color: transparent;    /* Border color */
+    -fx-border-width: 0.5;        /* Border width */
+}
+
+.date-picker:focused {
+    -fx-border-color: #a3e636;    /* Border color when focused */
+}
+
+.date-picker .text-field {
+    -fx-background-color: #1e1e1e; /* Inner text field background */
+    -fx-text-fill: white;          /* Text color */
+    -fx-prompt-text-fill: #808080; /* Prompt (placeholder) text color */
+    -fx-border-radius: 8;          /* Rounded inner corners */
+    -fx-padding: 4;
+}
+
+.date-picker .arrow {
+    -fx-background-color: black; /* Arrow button background */
+}
+
+.date-picker .arrow:hover {
+    -fx-background-color: #282828; /* Arrow button hover */
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: #6cc644; /* Change this to your desired color */
+    -fx-background-radius: 8;      /* Optional: Adjust for rounded corners */
+    -fx-border-color: transparent; /* Optional: Remove border */
+}
+
+.date-picker .arrow-button:hover {
+    -fx-background-color: #a3e636; /* Change color on hover */
+}
+
+.date-picker-popup {
+    -fx-background-color: #333333; /* Popup calendar background */
+    -fx-control-inner-background: #282828; /* Popup inner background */
+    -fx-text-fill: white;          /* Text color in popup */
+}
+
+
+
+
 
 
 
