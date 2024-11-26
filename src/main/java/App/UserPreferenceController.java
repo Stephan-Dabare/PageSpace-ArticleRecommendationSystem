@@ -67,13 +67,14 @@ public class UserPreferenceController {
         try {
             List<Article> preferredArticles = currentUser.loadPreferredArticles();
             if (preferredArticles.isEmpty()) {
-                System.out.println("No preferred articles found");
+                AlertHelper.showAlert("No Articles Found", "No articles found based on your preferences. You need to like articles to get recommendations.");
             }
             populateArticles(preferredArticles);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     private void populateArticles(List<Article> articles) {
         try {

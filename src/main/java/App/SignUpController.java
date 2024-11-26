@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -41,7 +40,7 @@ public class SignUpController {
 
         // Validate input
         if (username.isEmpty() || password.isEmpty() || User.isUsernameTaken(username)) {
-            showAlert("Sign Up Failed", "Username already exists. Please choose a different username.", AlertType.ERROR);
+            showAlert("Sign Up Failed", "Username already exists. Please choose a different username.");
             return;
         }
 
@@ -62,17 +61,12 @@ public class SignUpController {
         isAdminCheckBox.setSelected(false);
 
         // Show success message
-        showAlert("Success", "User has been created successfully!", AlertType.INFORMATION);
+        showAlert("Success", "User has been created successfully!");
         switchToLogin();
     }
 
-    // Utility method to show alerts
-    private void showAlert(String title, String message, AlertType alertType) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    private void showAlert(String title, String message) {
+        AlertHelper.showAlert(title, message);
     }
 
     private void switchToLogin() {

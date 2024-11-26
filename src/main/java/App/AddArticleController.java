@@ -68,7 +68,7 @@ public class AddArticleController {
         // Notify the user of success
         showAlert("Success", "Article successfully added!");
 
-        // Optionally, clear the fields after submission
+        //clear the fields after submission
         clearFields();
     }
 
@@ -107,9 +107,6 @@ public class AddArticleController {
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setContentText(message);
-        alert.showAndWait();
+        AlertHelper.showAlert(title, message);
     }
 }
