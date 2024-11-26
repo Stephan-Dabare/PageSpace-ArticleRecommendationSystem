@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +23,10 @@ public class SignUpController {
     public Button signUpBtn;
     @FXML
     public CheckBox isAdminCheckBox;
+    @FXML
+    public Button cancelBtn;
+    @FXML
+    public AnchorPane mainPane;
 
     // Initialize the database handler
     private DatabaseHandler dbHandler = new DatabaseHandler();
@@ -72,11 +77,16 @@ public class SignUpController {
 
     private void switchToLogin() {
         try {
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            Scene loginScene = new Scene(FXMLLoader.load(getClass().getResource("/App/login.fxml")));
+            Stage stage = (Stage) mainPane.getScene().getWindow();
+            Scene loginScene = new Scene(FXMLLoader.load(getClass().getResource("/App/loginView.fxml")));
             stage.setScene(loginScene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void cancelAction() {
+        switchToLogin();
     }
 }

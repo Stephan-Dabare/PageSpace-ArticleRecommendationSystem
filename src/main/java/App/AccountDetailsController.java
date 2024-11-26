@@ -19,72 +19,98 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-public class HomeController {
-
+public class AccountDetailsController {
     @FXML
-    public Button preferenceBtn;
-    @FXML
-    public Button signUpBtn;
+    public Button homeBtn;
     @FXML
     public Button loginBtn;
+    @FXML
+    public Button signUpBtn;
     @FXML
     public ScrollPane scrollPane;
     @FXML
     public Label usernameLabel;
+    @FXML
+    public Button preferenceBtn;
     @FXML
     public Button exitBtn;
     @FXML
     public AnchorPane mainPane;
     @FXML
     public Button accountBtn;
-
     @FXML
     private VBox articlesContainer;
 
-    private final DatabaseHandler databaseHandler;
 
     private GeneralUser currentUser;
+    private DatabaseHandler databaseHandler;
 
-    public HomeController() {
+    public AccountDetailsController() {
         this.databaseHandler = new DatabaseHandler();
-    }
-
-    public void setCurrentUser(GeneralUser user) {
-        this.currentUser = user;
     }
 
     @FXML
     public void initialize() {
         if (currentUser != null) {
             usernameLabel.setText(currentUser.getUsername());
-            loadArticles();
+            readHeadlines();
+        } else {
         }
     }
 
-    private void loadArticles() {
+    public void setCurrentUser(GeneralUser user) {
+        this.currentUser = user;
+        if (currentUser != null) {
+            usernameLabel.setText(currentUser.getUsername());
+            readHeadlines();
+        } else {
+            System.out.println("No user provided");
+        }
+    }
+
+    private void readHeadlines() {
         try {
-            List<Article> articles = databaseHandler.getAllArticles();
+            List<Article> readArticles = currentUser.loadReadArticles();
+            if (readArticles.isEmpty()) {
+                System.out.println("No preferred articles found");
+            }
+            populateArticles(readArticles);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateArticles(List<Article> articles) {
+        try {
             Collections.shuffle(articles);
 
             for (Article article : articles) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articlePostView.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articleHeadlineView.fxml"));
                 VBox articleBox = loader.load();
 
-                ArticlePostController controller = loader.getController();
-                controller.setGeneralUser(currentUser);
-
-                controller.setArticleData(
-                        article.getTitle(),
-                        article.getCategory().toString(),
-                        article.getCreatedBy().getUsername(),
-                        article.getDatePublished().toString(),
-                        article.getContent(),
-                        databaseHandler.bufferedImageToBytes(article.getImage())
-                );
+                ArticleHeadlineController controller = loader.getController();
+                controller.setTitleData(article.getTitle());
 
                 articlesContainer.getChildren().add(articleBox);
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void backToHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/homeView.fxml"));
+            Parent homeRoot = loader.load();
+
+            HomeController homeController = loader.getController();
+            homeController.setCurrentUser(currentUser);  // Pass current user to HomeController
+            homeController.initialize();
+
+            Stage stage = (Stage) articlesContainer.getScene().getWindow();
+            stage.setScene(new Scene(homeRoot));
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -129,25 +155,7 @@ public class HomeController {
     }
 
     @FXML
-    private void switchToAccountDetails(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/accountDetailsView.fxml"));
-            Parent accountDetailsRoot = loader.load();
-
-            AccountDetailsController controller = loader.getController();
-            controller.setCurrentUser(currentUser); // Pass the current user
-
-            Stage currentStage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            Scene accountDetailsScene = new Scene(accountDetailsRoot);
-            currentStage.setScene(accountDetailsScene);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void exitApp() {
+    private void exitApp(){
         System.exit(0);
     }
 }
-

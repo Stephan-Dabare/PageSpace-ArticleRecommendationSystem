@@ -13,6 +13,8 @@ public class ArticlePostController {
     @FXML
     public Label authorLabel;
     @FXML
+    public Button readBtn;
+    @FXML
     private ImageView imageView;
 
     @FXML
@@ -42,13 +44,28 @@ public class ArticlePostController {
             Image image = new Image(new ByteArrayInputStream(imageBytes));
             imageView.setImage(image);
         }
+
+        if (isArticleRead(title)) {
+            readBtn.getStyleClass().add("button5-pressed");
+            readBtn.setText("✔");
+        }
     }
 
     private GeneralUser currentUser;  // Pass the current user into this controller
+    public void setGeneralUser(GeneralUser generalUser) {
+        this.currentUser = generalUser;
+    }
 
     @FXML
     public void initialize() {
         likeButton.setOnAction(event -> handleLikeButtonClick());
+        readBtn.setOnAction(event -> handleReadButtonClick());
+
+        // Check if the article is read and update the button state
+        if (isArticleRead(titleLabel.getText())) {
+            readBtn.getStyleClass().add("button5-pressed");
+            readBtn.setText("✔");
+        }
     }
 
     private void handleLikeButtonClick() {
@@ -60,7 +77,18 @@ public class ArticlePostController {
         }
     }
 
-    public void setGeneralUser(GeneralUser generalUser) {
-        this.currentUser = generalUser;
+    private void handleReadButtonClick() {
+        String title = titleLabel.getText();
+        if (currentUser != null) {
+            currentUser.readArticle(title);
+            readBtn.getStyleClass().add("button5-pressed");
+            readBtn.setText("✔");
+        }
     }
+
+    private boolean isArticleRead(String title) {
+        return currentUser != null && currentUser.hasReadArticle(title);
+    }
+
+
 }

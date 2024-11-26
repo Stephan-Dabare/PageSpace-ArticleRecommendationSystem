@@ -186,4 +186,36 @@ public class DatabaseHandler {
         }
         return new ArrayList<>();
     }
+
+    public static void updateReadArticles(String username, List<String> readArticles) {
+        String sql = "UPDATE users SET read_articles = ? WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            String readArticlesString = String.join(",", readArticles);
+            pstmt.setString(1, readArticlesString);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<String> getReadArticles(String username) {
+        String sql = "SELECT read_articles FROM users WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String readArticles = rs.getString("read_articles");
+                if (readArticles != null && !readArticles.isEmpty()) {
+                    return Arrays.asList(readArticles.split(","));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
 }

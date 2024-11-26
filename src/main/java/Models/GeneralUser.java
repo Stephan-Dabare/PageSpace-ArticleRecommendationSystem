@@ -8,10 +8,12 @@ import java.util.stream.Collectors;
 
 public class GeneralUser extends User {
     private List<String> likedCategories;
+    private List<String> readArticles;
 
     public GeneralUser(String username, String password) {
         super(username, password, false);
         this.likedCategories = new ArrayList<>();
+        this.readArticles = new ArrayList<>();
     }
 
     //
@@ -29,5 +31,25 @@ public class GeneralUser extends User {
                 .stream()
                 .filter(article -> preferredCategories.contains(article.getCategory().getName()))
                 .collect(Collectors.toList());
+    }
+
+    public void readArticle(String title) {
+        if (!readArticles.contains(title)) {
+            readArticles.add(title);
+            DatabaseHandler.updateReadArticles(this.getUsername(), readArticles);
+        }
+    }
+
+    public List<Article> loadReadArticles() {
+        List<String> readArticles = DatabaseHandler.getReadArticles(this.getUsername());
+        DatabaseHandler dbHandler = DatabaseHandler.getInstance();
+        return dbHandler.getAllArticles()
+                .stream()
+                .filter(article -> readArticles.contains(article.getTitle()))
+                .collect(Collectors.toList());
+    }
+
+    public boolean hasReadArticle(String title) {
+        return readArticles.contains(title);
     }
 }

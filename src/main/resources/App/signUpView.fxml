@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.SignUpController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.SignUpController">
    <children>
       <BorderPane prefHeight="700.0" prefWidth="900.0" style="-fx-background-color: black;">
          <center>
@@ -57,7 +57,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="50.0" prefWidth="374.0">
                      <children>
-                        <CheckBox fx:id="isAdminCheckBox" mnemonicParsing="false" stylesheets="@../styles/styles.css" text="Admin" textFill="WHITE">
+                        <CheckBox fx:id="isAdminCheckBox" mnemonicParsing="false" stylesheets="@../styles/styles.css" text="Grant Admin Access" textFill="WHITE">
                            <font>
                               <Font name="Segoe UI Semibold" size="13.0" />
                            </font>
@@ -66,13 +66,18 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="65.0" prefWidth="374.0">
                      <children>
-                        <Button fx:id="signUpBtn" mnemonicParsing="false" onAction="#signUp" prefHeight="32.0" prefWidth="243.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="Create Account">
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
+                        <Button fx:id="signUpBtn" mnemonicParsing="false" onAction="#signUp" prefHeight="32.0" prefWidth="165.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="Create Account">
                            <font>
                               <Font name="Segoe UI" size="15.0" />
                            </font>
+                        </Button>
+                        <Button fx:id="cancelBtn" mnemonicParsing="false" onAction="#cancelAction" prefHeight="32.0" prefWidth="75.0" style="-fx-background-color: #a3e636;" styleClass="button1" stylesheets="@../styles/styles.css" text="Cancel">
+                           <font>
+                              <Font name="Segoe UI" size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
                         </Button>
                      </children>
                   </HBox>

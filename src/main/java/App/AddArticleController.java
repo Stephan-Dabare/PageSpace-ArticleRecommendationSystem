@@ -5,7 +5,12 @@ import Models.Article;
 import Models.Category;
 import Service.ContentCategorizer;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -27,6 +32,8 @@ public class AddArticleController {
     public TextField imagePathField;
     @FXML
     public DatePicker datePublishedField;
+    @FXML
+    public AnchorPane mainPane;
 
     private AdminUser adminUser;
 
@@ -85,6 +92,17 @@ public class AddArticleController {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    @FXML
+    private void switchToLogin() {
+        try {
+            Stage stage = (Stage) mainPane.getScene().getWindow();
+            Scene loginScene = new Scene(FXMLLoader.load(getClass().getResource("/App/loginView.fxml")));
+            stage.setScene(loginScene);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -47,7 +47,7 @@ public class LoginController {
 
     private void loadMainScene(User user) {
         try {
-            String fxmlFile = user.isAdmin() ? "/App/adminHome.fxml" : "/App/home.fxml";
+            String fxmlFile = user.isAdmin() ? "/App/adminHomeView.fxml" : "/App/homeView.fxml";
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
