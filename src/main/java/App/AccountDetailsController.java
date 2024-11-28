@@ -72,7 +72,7 @@ public class AccountDetailsController {
         try {
             List<Article> readArticles = currentUser.loadReadArticles();
             if (readArticles.isEmpty()) {
-                System.out.println("No preferred articles found");
+                AlertHelper.showAlert("No reading history has been found.", "You need to mark articles as read to get read history.");
             }
             populateArticles(readArticles);
         } catch (Exception e) {
