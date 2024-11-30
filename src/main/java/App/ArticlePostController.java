@@ -1,6 +1,7 @@
 package App;
 
 import Models.GeneralUser;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -33,7 +34,7 @@ public class ArticlePostController {
     private Button likeButton;
 
 
-    public void setArticleData(String title, String category,String author, String date, String content, byte[] imageBytes) {
+    public void setArticleData(String title, String category, String author, String date, String content, byte[] imageBytes) {
         titleLabel.setText(title);
         categoryLabel.setText(category);
         authorLabel.setText(author);
@@ -41,13 +42,15 @@ public class ArticlePostController {
         contentLabel.setText(content);
 
         if (imageBytes != null) {
-            Image image = new Image(new ByteArrayInputStream(imageBytes));
-            imageView.setImage(image);
-        }
+            Task<Image> loadImageTask = new Task<>() {
+                @Override
+                protected Image call() {
+                    return new Image(new ByteArrayInputStream(imageBytes));
+                }
+            };
 
-        if (isArticleRead(title)) {
-            readBtn.getStyleClass().add("button5-pressed");
-            readBtn.setText("✔");
+            loadImageTask.setOnSucceeded(event -> imageView.setImage(loadImageTask.getValue()));
+            new Thread(loadImageTask).start();
         }
     }
 
@@ -69,20 +72,24 @@ public class ArticlePostController {
     }
 
     private void handleLikeButtonClick() {
-        // Assuming you have the article category available in this controller
-        String category = categoryLabel.getText();  // Get category from the label or elsewhere
+        String category = categoryLabel.getText();
         if (currentUser != null) {
-            currentUser.likeCategory(category);
+            Runnable likeTask = () -> currentUser.likeCategory(category);
+            Thread likeThread = new Thread(likeTask);
             likeButton.setText("♥");
+            likeThread.setDaemon(true);
+            likeThread.start();
         }
     }
 
     private void handleReadButtonClick() {
         String title = titleLabel.getText();
         if (currentUser != null) {
-            currentUser.readArticle(title);
-            readBtn.getStyleClass().add("button5-pressed");
+            Runnable readTask = () -> currentUser.readArticle(title);
+            Thread readThread = new Thread(readTask);
             readBtn.setText("✔");
+            readThread.setDaemon(true);
+            readThread.start();
         }
     }
 

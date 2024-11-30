@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GeneralUser extends User {
-    private List<String> likedCategories;
-    private List<String> readArticles;
+    private static final boolean isAdmin = false;
+    private List<String> likedCategories = new ArrayList<>();
+    private List<String> readArticles = new ArrayList<>();
 
     public GeneralUser(String username, String password) {
-        super(username, password, false);
+        super(username, password, isAdmin);
         this.likedCategories = new ArrayList<>();
         this.readArticles = new ArrayList<>();
     }

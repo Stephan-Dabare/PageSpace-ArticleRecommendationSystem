@@ -95,7 +95,7 @@ public class DatabaseHandler {
         }
     }
 
-    public List<Article> getAllArticles() {
+    public synchronized List<Article> getAllArticles() {
         List<Article> articles = new ArrayList<>();
         String sql = "SELECT * FROM articles";
 

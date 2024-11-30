@@ -4,6 +4,7 @@ import Models.AdminUser;
 import Models.GeneralUser;
 import Models.User;
 import DB.DatabaseHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,13 +36,21 @@ public class LoginController {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        User user = dbManager.authenticateUser(username, password);
-        if (user != null) {
-            showAlert("Login Successful", "Welcome, " + user.getUsername() + "!");
-            loadMainScene(user);
-        } else {
-            showAlert("Login Failed", "Invalid username or password. Please try again.");
-        }
+        Runnable loginTask = () -> {
+            User user = dbManager.authenticateUser(username, password);
+            Platform.runLater(() -> {
+                if (user != null) {
+                    showAlert("Login Successful", "Welcome, " + user.getUsername() + "!");
+                    loadMainScene(user);
+                } else {
+                    showAlert("Login Failed", "Invalid username or password. Please try again.");
+                }
+            });
+        };
+
+        Thread loginThread = new Thread(loginTask);
+        loginThread.setDaemon(true); // Ensure thread closes when the application exits
+        loginThread.start();
     }
 
     private void loadMainScene(User user) {

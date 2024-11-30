@@ -3,6 +3,7 @@ package App;
 import Models.Article;
 import Models.GeneralUser;
 import DB.DatabaseHandler;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,15 +70,33 @@ public class AccountDetailsController {
     }
 
     private void readHeadlines() {
-        try {
-            List<Article> readArticles = currentUser.loadReadArticles();
-            if (readArticles.isEmpty()) {
-                AlertHelper.showAlert("No reading history has been found.", "You need to mark articles as read to get read history.");
+        Task<List<Article>> loadReadTask = new Task<>() {
+            @Override
+            protected List<Article> call() {
+                return currentUser.loadReadArticles();
             }
-            populateArticles(readArticles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        };
+
+        loadReadTask.setOnSucceeded(event -> {
+            try {
+                List<Article> readArticles = loadReadTask.get();
+                if (readArticles.isEmpty()) {
+                    AlertHelper.showAlert("No reading history has been found.", "You need to mark articles as read to get read history.");
+                }
+                populateArticles(readArticles);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        loadReadTask.setOnFailed(event -> {
+            Throwable throwable = loadReadTask.getException();
+            throwable.printStackTrace();
+        });
+
+        Thread readThread = new Thread(loadReadTask);
+        readThread.setDaemon(true);
+        readThread.start();
     }
 
     private void populateArticles(List<Article> articles) {

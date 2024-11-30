@@ -3,6 +3,7 @@ package App;
 import Models.Article;
 import Models.GeneralUser;
 import DB.DatabaseHandler;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,15 +65,33 @@ public class UserPreferenceController {
     }
 
     private void loadUserPreferredArticles() {
-        try {
-            List<Article> preferredArticles = currentUser.loadPreferredArticles();
-            if (preferredArticles.isEmpty()) {
-                AlertHelper.showAlert("No Articles Found", "No articles found based on your preferences. You need to like articles to get recommendations.");
+        Task<List<Article>> loadPreferredTask = new Task<>() {
+            @Override
+            protected List<Article> call() {
+                return currentUser.loadPreferredArticles();
             }
-            populateArticles(preferredArticles);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        };
+
+        loadPreferredTask.setOnSucceeded(event -> {
+            try {
+                List<Article> preferredArticles = loadPreferredTask.get();
+                if (preferredArticles.isEmpty()) {
+                    AlertHelper.showAlert("No Articles Found", "No articles found based on your preferences. You need to like articles to get recommendations.");
+                }
+                populateArticles(preferredArticles);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        loadPreferredTask.setOnFailed(event -> {
+            Throwable throwable = loadPreferredTask.getException();
+            throwable.printStackTrace();
+        });
+
+        Thread preferenceThread = new Thread(loadPreferredTask);
+        preferenceThread.setDaemon(true);
+        preferenceThread.start();
     }
 
 

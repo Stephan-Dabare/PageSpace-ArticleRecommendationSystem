@@ -3,6 +3,7 @@ package App;
 import Models.Article;
 import Models.GeneralUser;
 import DB.DatabaseHandler;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -62,31 +63,50 @@ public class HomeController {
     }
 
     private void loadArticles() {
-        try {
-            List<Article> articles = databaseHandler.getAllArticles();
-            Collections.shuffle(articles);
-
-            for (Article article : articles) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articlePostView.fxml"));
-                VBox articleBox = loader.load();
-
-                ArticlePostController controller = loader.getController();
-                controller.setGeneralUser(currentUser);
-
-                controller.setArticleData(
-                        article.getTitle(),
-                        article.getCategory().toString(),
-                        article.getCreatedBy().getUsername(),
-                        article.getDatePublished().toString(),
-                        article.getContent(),
-                        databaseHandler.bufferedImageToBytes(article.getImage())
-                );
-
-                articlesContainer.getChildren().add(articleBox);
+        Task<List<Article>> loadArticlesTask = new Task<>() {
+            @Override
+            protected List<Article> call() {
+                return databaseHandler.getAllArticles();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        };
+
+        loadArticlesTask.setOnSucceeded(event -> {
+            try {
+                List<Article> articles = loadArticlesTask.get();
+                Collections.shuffle(articles);
+                articlesContainer.getChildren().clear();
+                for (Article article : articles) {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(getClass().getResource("/App/articlePostView.fxml"));
+                    VBox articleBox = loader.load();
+
+                    ArticlePostController controller = loader.getController();
+                    controller.setGeneralUser(currentUser);
+
+                    controller.setArticleData(
+                            article.getTitle(),
+                            article.getCategory().toString(),
+                            article.getCreatedBy().getUsername(),
+                            article.getDatePublished().toString(),
+                            article.getContent(),
+                            databaseHandler.bufferedImageToBytes(article.getImage())
+                    );
+
+                    articlesContainer.getChildren().add(articleBox);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        loadArticlesTask.setOnFailed(event -> {
+            Throwable throwable = loadArticlesTask.getException();
+            throwable.printStackTrace();
+        });
+
+        Thread articleThread = new Thread(loadArticlesTask);
+        articleThread.setDaemon(true);
+        articleThread.start();
     }
 
     @FXML
@@ -107,11 +127,16 @@ public class HomeController {
     }
 
     @FXML
-    private void switchToLogin() {
+    private void switchToLogin(ActionEvent event) {
         try {
-            Stage stage = (Stage) mainPane.getScene().getWindow();
-            Scene loginScene = new Scene(FXMLLoader.load(getClass().getResource("/App/loginView.fxml")));
-            stage.setScene(loginScene);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/loginView.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage loginStage = new Stage();
+            loginStage.setTitle("Login");
+            loginStage.setScene(new Scene(loginRoot));
+            loginStage.setResizable(false);
+            loginStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -28,9 +28,9 @@ public class User {
     }
 
     //Check whether the username is taken
-    public static boolean isUsernameTaken(String newUsername) {
+    public static boolean isUsernameTaken(String Username) {
         DatabaseHandler dbManager = new DatabaseHandler();
         List<String> usernames = dbManager.getAllUsernames();
-        return usernames.contains(newUsername);
+        return usernames.contains(Username);
     }
 }
