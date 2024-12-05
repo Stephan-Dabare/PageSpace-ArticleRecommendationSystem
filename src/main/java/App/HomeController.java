@@ -3,6 +3,7 @@ package App;
 import Models.Article;
 import Models.GeneralUser;
 import DB.DatabaseHandler;
+
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -38,22 +38,26 @@ public class HomeController {
     public AnchorPane mainPane;
     @FXML
     public Button accountBtn;
-
     @FXML
     private VBox articlesContainer;
 
+    // Get an instance of the database handler
     private final DatabaseHandler databaseHandler;
 
+    // The current user
     private GeneralUser currentUser;
 
+    // Constructor
     public HomeController() {
         this.databaseHandler = new DatabaseHandler();
     }
 
+    // Set the current user
     public void setCurrentUser(GeneralUser user) {
         this.currentUser = user;
     }
 
+    // Initialize the controller
     @FXML
     public void initialize() {
         if (currentUser != null) {
@@ -62,7 +66,9 @@ public class HomeController {
         }
     }
 
+    // Load articles from the database
     private void loadArticles() {
+        // Load articles from the database
         Task<List<Article>> loadArticlesTask = new Task<>() {
             @Override
             protected List<Article> call() {
@@ -70,6 +76,7 @@ public class HomeController {
             }
         };
 
+        // Set the articles in the articles container
         loadArticlesTask.setOnSucceeded(event -> {
             try {
                 List<Article> articles = loadArticlesTask.get();
@@ -83,6 +90,7 @@ public class HomeController {
                     ArticlePostController controller = loader.getController();
                     controller.setGeneralUser(currentUser);
 
+                    // Set the article data
                     controller.setArticleData(
                             article.getTitle(),
                             article.getCategory().toString(),
@@ -99,16 +107,21 @@ public class HomeController {
             }
         });
 
+        // Handle the failed task
         loadArticlesTask.setOnFailed(event -> {
             Throwable throwable = loadArticlesTask.getException();
             throwable.printStackTrace();
         });
 
+        // Create a new thread
         Thread articleThread = new Thread(loadArticlesTask);
+        // Set the thread as a daemon thread
         articleThread.setDaemon(true);
+        // Start the thread
         articleThread.start();
     }
 
+    // Switch to the preferences view
     @FXML
     private void switchToPreferences(ActionEvent event) {
         try {
@@ -126,6 +139,7 @@ public class HomeController {
         }
     }
 
+    // Switch to the login view
     @FXML
     private void switchToLogin(ActionEvent event) {
         try {
@@ -142,6 +156,7 @@ public class HomeController {
         }
     }
 
+    // Switch to the sign up view
     @FXML
     private void switchToSignUp() {
         try {
@@ -153,6 +168,7 @@ public class HomeController {
         }
     }
 
+    // Switch to the account details view
     @FXML
     private void switchToAccountDetails(ActionEvent event) {
         try {
@@ -170,6 +186,7 @@ public class HomeController {
         }
     }
 
+    // Exit the application
     @FXML
     private void exitApp() {
         System.exit(0);

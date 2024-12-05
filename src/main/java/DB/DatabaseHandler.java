@@ -1,5 +1,6 @@
 package DB;
 
+// Imports
 import Models.Article;
 import Models.Category;
 import Models.User;
@@ -15,21 +16,28 @@ import java.sql.*;
 import java.util.*;
 
 public class DatabaseHandler {
+    // Database URL for sqlite DB.
     private static final String DATABASE_URL = "jdbc:sqlite:database.db";
+    // Connection object
     private Connection connection;
+    // DB instance
     private static DatabaseHandler instance;
 
+    // Constructor
     public DatabaseHandler() {
         createConnection();
     }
 
+    // Get instance of the DB
     public static DatabaseHandler getInstance() {
         if (instance == null) {
+            // Create a new instance if it doesn't exist.
             instance = new DatabaseHandler();
         }
         return instance;
     }
 
+    // Create connection to the DB.
     private void createConnection() {
         try {
             connection = DriverManager.getConnection(DATABASE_URL);
@@ -52,6 +60,7 @@ public class DatabaseHandler {
         }
     }
 
+    // Authenticate a user with username and password.
     public User authenticateUser(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
@@ -60,6 +69,7 @@ public class DatabaseHandler {
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
 
+            // Check if the user exists
             if (rs.next()) {
                 boolean isAdmin = rs.getInt("is_Admin") == 1;
                 if (isAdmin) {
@@ -95,6 +105,8 @@ public class DatabaseHandler {
         }
     }
 
+    // Get all articles
+    // synchronized to manage concurrent access.
     public synchronized List<Article> getAllArticles() {
         List<Article> articles = new ArrayList<>();
         String sql = "SELECT * FROM articles";
@@ -102,7 +114,9 @@ public class DatabaseHandler {
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
+            // Iterate over the result set and create article objects.
             while (rs.next()) {
+                // Create an article object
                 Article article = new Article(
                         rs.getString("title"),
                         rs.getString("content"),
@@ -111,14 +125,17 @@ public class DatabaseHandler {
                         new java.sql.Date(rs.getDate("date_Published").getTime()),
                         bytesToBufferedImage(rs.getBytes("image"))
                 );
+                // Add the article to the list
                 articles.add(article);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        // Return the list of articles
         return articles;
     }
 
+    // Convert a buffered image to bytes
     public static byte[] bufferedImageToBytes(BufferedImage image) {
         if (image == null) return null;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -130,6 +147,7 @@ public class DatabaseHandler {
         }
     }
 
+    // Convert bytes to buffered image
     private static BufferedImage bytesToBufferedImage(byte[] bytes) {
         if (bytes == null) return null;
         try {
@@ -140,6 +158,7 @@ public class DatabaseHandler {
         }
     }
 
+    // Get all users
     public List<String> getAllUsernames() {
         List<String> usernames = new ArrayList<>();
         String sql = "SELECT username FROM users";
@@ -155,6 +174,7 @@ public class DatabaseHandler {
         return usernames;
     }
 
+    // Update liked categories
     public static void updateLikedCategories(String username, List<String> likedCategories) {
         String sql = "UPDATE users SET liked_category = ? WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
@@ -168,25 +188,7 @@ public class DatabaseHandler {
         }
     }
 
-    public static List<String> getLikedCategories(String username) {
-        String sql = "SELECT liked_category FROM users WHERE username = ?";
-        try (Connection conn = DriverManager.getConnection(DATABASE_URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                String likedCategories = rs.getString("liked_category");
-                if (likedCategories != null && !likedCategories.isEmpty()) {
-                    return Arrays.asList(likedCategories.split(","));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return new ArrayList<>();
-    }
-
+    // Update read articles
     public static void updateReadArticles(String username, List<String> readArticles) {
         String sql = "UPDATE users SET read_articles = ? WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
@@ -200,6 +202,7 @@ public class DatabaseHandler {
         }
     }
 
+    // Get read articles
     public static List<String> getReadArticles(String username) {
         String sql = "SELECT read_articles FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(DATABASE_URL);
@@ -216,6 +219,39 @@ public class DatabaseHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        // Return an empty list if no read articles.
         return new ArrayList<>();
+    }
+
+    // Get liked categories
+    // synchronized to manage concurrent access
+    public synchronized Category getCategoryWithArticles(String categoryName) {
+        // Create a category object
+        Category category = new Category(categoryName);
+        String sql = "SELECT * FROM Articles WHERE category = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, categoryName);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                // Create an article object.
+                Article article = new Article(
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        category,
+                        new AdminUser(rs.getString("created_by"), "adminPassword"),
+                        rs.getDate("date_published"),
+                        bytesToBufferedImage(rs.getBytes("image"))
+                );
+
+                // Add the article to the category.
+                category.getArticles().add(article);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return category;
     }
 }

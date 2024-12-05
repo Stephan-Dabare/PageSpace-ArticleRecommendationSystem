@@ -31,11 +31,14 @@ public class LoginController {
 
     private DatabaseHandler dbManager = new DatabaseHandler();
 
+    // Handle login button click
     @FXML
     private void handleLogin() {
+        // Get the username and password from the input fields
         String username = usernameField.getText();
         String password = passwordField.getText();
 
+        // Create a new thread to authenticate the user
         Runnable loginTask = () -> {
             User user = dbManager.authenticateUser(username, password);
             Platform.runLater(() -> {
@@ -48,11 +51,16 @@ public class LoginController {
             });
         };
 
+        // Create a new thread
         Thread loginThread = new Thread(loginTask);
-        loginThread.setDaemon(true); // Ensure thread closes when the application exits
+        // Set the thread as a daemon thread
+        // Ensure thread closes when the application exits
+        loginThread.setDaemon(true);
+        // Start the thread
         loginThread.start();
     }
 
+    // Load the main scene based on the user's role
     private void loadMainScene(User user) {
         try {
             String fxmlFile = user.isAdmin() ? "/App/adminHomeView.fxml" : "/App/homeView.fxml";
@@ -79,10 +87,12 @@ public class LoginController {
         }
     }
 
+    // Show an alert dialog
     private void showAlert(String title, String message) {
         AlertHelper.showAlert(title, message);
     }
 
+    // Switch to the sign up scene
     @FXML
     private void switchToSignUp() {
         try {

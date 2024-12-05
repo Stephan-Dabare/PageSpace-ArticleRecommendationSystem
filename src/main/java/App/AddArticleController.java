@@ -4,14 +4,13 @@ import Models.AdminUser;
 import Models.Article;
 import Models.Category;
 import Service.ContentCategorizer;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,13 +36,13 @@ public class AddArticleController {
 
     private AdminUser adminUser;
 
+    // Setter for the AdminUser
     public void setAdminUser(AdminUser adminUser) {
         this.adminUser = adminUser;
     }
 
     @FXML
     private void handleSubmit() {
-
         // Get input data from fields
         String title = titleField.getText();
         String content = contentField.getText();
@@ -72,6 +71,7 @@ public class AddArticleController {
         clearFields();
     }
 
+    // Clear the fields
     private void clearFields() {
         titleField.clear();
         contentField.clear();
@@ -79,8 +79,7 @@ public class AddArticleController {
         datePublishedField.setValue(null);
     }
 
-
-
+    // Load image from file path
     private BufferedImage loadImage(String path) {
         File file = new File(path);
         if (!file.exists()) {
@@ -97,6 +96,7 @@ public class AddArticleController {
 
     @FXML
     private void switchToLogin() {
+        // Switch to the login view
         try {
             Stage stage = (Stage) mainPane.getScene().getWindow();
             Scene loginScene = new Scene(FXMLLoader.load(getClass().getResource("/App/loginView.fxml")));
@@ -106,6 +106,7 @@ public class AddArticleController {
         }
     }
 
+    // Show an alert dialog
     private void showAlert(String title, String message) {
         AlertHelper.showAlert(title, message);
     }

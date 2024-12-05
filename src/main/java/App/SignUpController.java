@@ -60,15 +60,18 @@ public class SignUpController {
         passwordField.clear();
         isAdminCheckBox.setSelected(false);
 
-        // Show success message
+        // Show success message.
         showAlert("Success", "User has been created successfully!");
+        // Switch to the login view.
         switchToLogin();
     }
 
+    // Method to show an alert dialog.
     private void showAlert(String title, String message) {
         AlertHelper.showAlert(title, message);
     }
 
+    // Method to switch to the login view.
     private void switchToLogin() {
         try {
             Stage stage = (Stage) mainPane.getScene().getWindow();
@@ -79,6 +82,7 @@ public class SignUpController {
         }
     }
 
+    // Method to handle cancel.
     @FXML
     private void cancelAction() {
         switchToLogin();

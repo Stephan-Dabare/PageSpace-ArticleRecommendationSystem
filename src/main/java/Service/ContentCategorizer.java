@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ContentCategorizer {
+    // Map to store category keywords.
     private static Map<String, Set<String>> categoryKeywords = new HashMap<>();
 
+    // Static block to initialize category keywords.
     static {
         categoryKeywords.put("Sports", new HashSet<>(Arrays.asList(
                 "team", "game", "player", "score", "tournament", "championship", "coach",
@@ -103,18 +105,23 @@ public class ContentCategorizer {
         )));
     }
 
+    // Method to categorize content based on keywords.
     public static String categorizeContent(String content) {
+        // Check if content is null or empty.
         if (content == null || content.trim().isEmpty()) {
             return "Other";
         }
 
+        // Convert content to lowercase and split into words.
         content = content.toLowerCase();
         String[] words = content.split("\\W+");
 
+        // Remove common stop words to filter out.
         Set<String> stopWords = new HashSet<>(Arrays.asList(
                 "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by"
         ));
 
+        // Count frequency of words excluding stop words.
         Map<String, Integer> wordFrequency = Arrays.stream(words)
                 .filter(word -> !stopWords.contains(word))
                 .collect(Collectors.groupingBy(
@@ -122,24 +129,34 @@ public class ContentCategorizer {
                         Collectors.collectingAndThen(Collectors.counting(), Long::intValue)
                 ));
 
+
+        // Map to store category scores.
         Map<String, Double> categoryScores = new HashMap<>();
 
+        // Loop through each category and calculate score.
         for (Map.Entry<String, Set<String>> category : categoryKeywords.entrySet()) {
+            // Get category name and keywords.
             String categoryName = category.getKey();
+            // Get keywords for the category.
             Set<String> keywords = category.getValue();
+            // Initialize match count.
             int matchCount = 0;
 
+            // Loop through each word in the content.
             for (String word : wordFrequency.keySet()) {
+                // Check if word is a keyword for the category.
                 if (keywords.contains(word)) {
                     matchCount += wordFrequency.get(word);
                 }
             }
 
+            // Calculate score for the category.
             if (matchCount > 0) {
                 categoryScores.put(categoryName, (double) matchCount / keywords.size());
             }
         }
 
+        // Find category with max score.
         return categoryScores.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .filter(entry -> entry.getValue() > 0.05)

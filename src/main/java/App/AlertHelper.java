@@ -10,6 +10,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 
 public class AlertHelper {
+    // Show an alert with the given title and message
     public static void showAlert(String title, String message) {
         try {
             Stage stage = new Stage();

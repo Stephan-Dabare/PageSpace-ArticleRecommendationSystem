@@ -1,13 +1,13 @@
 package App;
 
 import Models.GeneralUser;
+
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
 import java.io.ByteArrayInputStream;
 
 public class ArticlePostController {
@@ -33,32 +33,13 @@ public class ArticlePostController {
     @FXML
     private Button likeButton;
 
-
-    public void setArticleData(String title, String category, String author, String date, String content, byte[] imageBytes) {
-        titleLabel.setText(title);
-        categoryLabel.setText(category);
-        authorLabel.setText(author);
-        dateLabel.setText(date);
-        contentLabel.setText(content);
-
-        if (imageBytes != null) {
-            Task<Image> loadImageTask = new Task<>() {
-                @Override
-                protected Image call() {
-                    return new Image(new ByteArrayInputStream(imageBytes));
-                }
-            };
-
-            loadImageTask.setOnSucceeded(event -> imageView.setImage(loadImageTask.getValue()));
-            new Thread(loadImageTask).start();
-        }
-    }
-
-    private GeneralUser currentUser;  // Pass the current user into this controller
+    // Pass the current user into this controller
+    private GeneralUser currentUser;
     public void setGeneralUser(GeneralUser generalUser) {
         this.currentUser = generalUser;
     }
 
+    // Initialize the controller
     @FXML
     public void initialize() {
         likeButton.setOnAction(event -> handleLikeButtonClick());
@@ -71,10 +52,35 @@ public class ArticlePostController {
         }
     }
 
+    // Set the article data to the view
+    public void setArticleData(String title, String category, String author, String date, String content, byte[] imageBytes) {
+        titleLabel.setText(title);
+        categoryLabel.setText(category);
+        authorLabel.setText(author);
+        dateLabel.setText(date);
+        contentLabel.setText(content);
+
+        // Load the image
+        if (imageBytes != null) {
+            Task<Image> loadImageTask = new Task<>() {
+                @Override
+                protected Image call() {
+                    return new Image(new ByteArrayInputStream(imageBytes));
+                }
+            };
+
+            loadImageTask.setOnSucceeded(event -> imageView.setImage(loadImageTask.getValue()));
+            // Start the task in a new thread
+            new Thread(loadImageTask).start();
+        }
+    }
+
+    // Handle the like button click
     private void handleLikeButtonClick() {
         String category = categoryLabel.getText();
         if (currentUser != null) {
-            Runnable likeTask = () -> currentUser.likeCategory(category);
+            Models.Category categoryObj = new Models.Category(category);
+            Runnable likeTask = () -> currentUser.likeCategory(categoryObj);
             Thread likeThread = new Thread(likeTask);
             likeButton.setText("♥");
             likeThread.setDaemon(true);
@@ -82,6 +88,7 @@ public class ArticlePostController {
         }
     }
 
+    // Handle the read button click
     private void handleReadButtonClick() {
         String title = titleLabel.getText();
         if (currentUser != null) {
@@ -93,9 +100,8 @@ public class ArticlePostController {
         }
     }
 
+    // Check if the article is read
     private boolean isArticleRead(String title) {
         return currentUser != null && currentUser.hasReadArticle(title);
     }
-
-
 }

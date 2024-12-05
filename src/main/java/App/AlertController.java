@@ -17,10 +17,10 @@ public class AlertController {
         closeButton.getScene().getWindow().hide();
     }
 
+    // Setters
     public void setTitle(String title) {
         titleLabel.setText(title);
     }
-
     public void setMessage(String message) {
         messageLabel.setText(message);
     }

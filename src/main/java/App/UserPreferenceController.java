@@ -3,6 +3,7 @@ package App;
 import Models.Article;
 import Models.GeneralUser;
 import DB.DatabaseHandler;
+
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -42,21 +42,26 @@ public class UserPreferenceController {
     @FXML
     private VBox articlesContainer;
 
-
+    // Current user
     private GeneralUser currentUser;
+    // Database handler
     private DatabaseHandler databaseHandler;
 
+    // Constructor
     public UserPreferenceController() {
         this.databaseHandler = new DatabaseHandler();
     }
 
+    // Initialize method
     @FXML
     public void initialize() {
     }
 
+    //  Set current user
     public void setCurrentUser(GeneralUser user) {
         this.currentUser = user;
         if (currentUser != null) {
+            // Set the username label
             usernameLabel.setText(currentUser.getUsername());
             loadUserPreferredArticles();
         } else {
@@ -64,7 +69,9 @@ public class UserPreferenceController {
         }
     }
 
+    // Load user preferred articles
     private void loadUserPreferredArticles() {
+        // Load preferred articles
         Task<List<Article>> loadPreferredTask = new Task<>() {
             @Override
             protected List<Article> call() {
@@ -72,10 +79,13 @@ public class UserPreferenceController {
             }
         };
 
+        // Set on succeeded and on failed event handlers
         loadPreferredTask.setOnSucceeded(event -> {
             try {
+                // Get preferred articles
                 List<Article> preferredArticles = loadPreferredTask.get();
                 if (preferredArticles.isEmpty()) {
+                    // Show alert if no articles found.
                     AlertHelper.showAlert("No Articles Found", "No articles found based on your preferences. You need to like articles to get recommendations.");
                 }
                 populateArticles(preferredArticles);
@@ -84,21 +94,27 @@ public class UserPreferenceController {
             }
         });
 
+        // On failed event handler
         loadPreferredTask.setOnFailed(event -> {
             Throwable throwable = loadPreferredTask.getException();
             throwable.printStackTrace();
         });
 
+        // Create a new thread
         Thread preferenceThread = new Thread(loadPreferredTask);
+        // Set the thread as a daemon thread
         preferenceThread.setDaemon(true);
+        // Start the thread
         preferenceThread.start();
     }
 
-
+    // Populate articles
     private void populateArticles(List<Article> articles) {
         try {
+            // Shuffle the articles
             Collections.shuffle(articles);
 
+            // Iterate through the articles and populate the articles container
             for (Article article : articles) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/App/articlePostView.fxml"));
                 VBox articleBox = loader.load();
@@ -106,6 +122,7 @@ public class UserPreferenceController {
                 ArticlePostController controller = loader.getController();
                 controller.setGeneralUser(currentUser);
 
+                // Set article data
                 controller.setArticleData(
                         article.getTitle(),
                         article.getCategory().toString(),
@@ -115,6 +132,7 @@ public class UserPreferenceController {
                         databaseHandler.bufferedImageToBytes(article.getImage())
                 );
 
+                // Add the article box to the articles container
                 articlesContainer.getChildren().add(articleBox);
             }
         } catch (Exception e) {
@@ -122,6 +140,7 @@ public class UserPreferenceController {
         }
     }
 
+    // Event handlers
     @FXML
     private void backToHome() {
         try {
@@ -139,6 +158,7 @@ public class UserPreferenceController {
         }
     }
 
+    // Switch to login view
     @FXML
     private void switchToLogin() {
         try {
@@ -150,6 +170,7 @@ public class UserPreferenceController {
         }
     }
 
+    // Switch to sign up view
     @FXML
     private void switchToSignUp() {
         try {
@@ -161,6 +182,7 @@ public class UserPreferenceController {
         }
     }
 
+    // Switch to account details view
     @FXML
     private void switchToAccountDetails(ActionEvent event) {
         try {
@@ -178,6 +200,7 @@ public class UserPreferenceController {
         }
     }
 
+    // exit app
     @FXML
     private void exitApp(){
         System.exit(0);

@@ -7,6 +7,7 @@ public class ArticleHeadlineController {
     @FXML
     private Label titleLabel;
 
+    // Setters
     public void setTitleData(String title) {
         titleLabel.setText(title);
     }
